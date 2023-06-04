@@ -19,6 +19,7 @@ else
     composer_exit_code=$?
     if [ $composer_exit_code -eq 0 ]; then
         echo "Composer install completed successfully."
+        
     else
         echo "Composer install failed. Exit code: $composer_exit_code"
         exit $composer_exit_code
