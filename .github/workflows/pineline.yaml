@@ -99,9 +99,19 @@ jobs:
                 context: ./frontend
                 push: true
                 tags: ghcr.io/lampspace/sdws-frontend:latest
+                
+    check-deployment:
+      needs: [api-build, frontend-build]
+      name: Check Deployment
+      runs-on: ubuntu-latest
+      steps:
+        - name: Set Deployment Flag
+          id: set-deployment-flag
+          run: echo "::set-output name=deploy::${{ needs.api-build.result == 'success' || needs.frontend-build.result == 'success' }}"
 
     deployment:
-        needs: [changes, api-build, frontend-build]
+        needs: [check-deployment]
+        if: ${{ needs.check-deployment.outputs.deploy == 'true' }}
         name: Deployment
         runs-on: ubuntu-latest
         steps:
