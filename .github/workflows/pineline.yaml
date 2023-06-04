@@ -96,9 +96,11 @@ jobs:
                 context: ./frontend
                 push: true
                 tags: ghcr.io/lampspace/sdws-frontend:latest
-            
 
     deployment:
+        needs:
+            - api-build
+            - frontend-build
         if: ${{ needs.api-build.outputs.api == 'true' || needs.frontend-build.outputs.frontend == 'true' }}
         name: Deployment
         runs-on: ubuntu-latest
