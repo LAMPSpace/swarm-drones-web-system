@@ -98,6 +98,7 @@ jobs:
                 tags: ghcr.io/lampspace/sdws-frontend:latest
 
     deployment:
+        needs: [api-build, frontend-build]
         name: Deployment
         runs-on: ubuntu-latest
         steps:
