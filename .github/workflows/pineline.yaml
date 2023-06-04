@@ -106,17 +106,20 @@ jobs:
 
             - name: Check if API Build exists
               id: api-build-check
-              uses: sdras/exists-action@master
-              with:
-                job-name: api-build
-                repo-token: ${{ secrets.TOKEN }}
-
+              run: |
+                if [ -d "api" ]; then
+                  echo "::set-output name=exists::true"
+                else
+                  echo "::set-output name=exists::false"
+                fi
             - name: Check if Frontend Build exists
               id: frontend-build-check
-              uses: sdras/exists-action@master
-              with:
-                job-name: frontend-build
-                repo-token: ${{ secrets.TOKEN }}
+              run: |
+                if [ -d "frontend" ]; then
+                  echo "::set-output name=exists::true"
+                else
+                  echo "::set-output name=exists::false"
+                fi
 
             - name: SSH Docker Compose
               if: steps.api-build-check.outputs.exists == 'true' || steps.frontend-build-check.outputs.exists == 'true'
