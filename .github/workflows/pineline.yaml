@@ -96,24 +96,10 @@ jobs:
                 context: ./frontend
                 push: true
                 tags: ghcr.io/lampspace/sdws-frontend:latest
-                
-    check-deployment:
-      needs: [api-build, frontend-build]
-      name: Check Deployment
-      runs-on: ubuntu-latest
-      outputs:
-        deploy: ${{ steps.check-deployment.outputs.deploy }}
-      steps:
-        - name: Check API Build
-          if: ${{ needs.api-build.result == 'success' }}
-          run: echo "::set-output name=deploy::true"
-        - name: Check Frontend Build
-          if: ${{ needs.frontend-build.result == 'success' }}
-          run: echo "::set-output name=deploy::true"
+            
 
     deployment:
-        needs: [check-deployment]
-        if: ${{ needs.check-deployment.outputs.deploy == 'true' }}
+        if: ${{ needs.api-build.outputs.api == 'true' || needs.frontend-build.outputs.frontend == 'true' }}
         name: Deployment
         runs-on: ubuntu-latest
         steps:
