@@ -13,25 +13,25 @@ docker run -d -p 8000:80 api
 
 3. Install dependencies
 ```sh
-docker exec -it api-service composer install
+docker exec -it api composer install
 ```
 
 4. Generate application key
 ```sh
-docker exec -it api-service php artisan key:generate
+docker exec -it api php artisan key:generate
 ```
 
 5. Run database migrations
 ```sh
-docker exec -it api-service php artisan migrate
+docker exec -it api php artisan migrate
 ```
 
 6. Run database seeders
 ```sh
-docker exec -it api-service php artisan db:seed
+docker exec -it api php artisan db:seed
 ```
 
 7. Run tests
 ```sh
-docker exec -it api-service php artisan test
+docker exec -it api php artisan test
 ```
