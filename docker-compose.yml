@@ -2,10 +2,7 @@ version: '3.7'
 
 services:
   api:
-    image: swarm-drones-web-system-api
-    build:
-      context: ./api
-      dockerfile: Dockerfile
+    image: ghcr.io/lampspace/sdws-api:latest
     ports:
       - 8080:80
     volumes:
@@ -16,10 +13,7 @@ services:
       WWWUSER: '${WWWUSER:-1000}'
       WWWGROUP: '${WWWGROUP:-1000}'
   frontend:
-    image: swarm-drones-web-system-frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: ghcr.io/lampspace/sdws-frontend:latest
     ports:
       - 80:3000
     networks:
