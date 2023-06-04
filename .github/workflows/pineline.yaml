@@ -98,14 +98,28 @@ jobs:
                 tags: ghcr.io/lampspace/sdws-frontend:latest
 
     deployment:
-        needs: [api-build, frontend-build]
         name: Deployment
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v2
 
+            - name: Check if API Build exists
+              id: api-build-check
+              uses: sdras/exists-action@master
+              with:
+                job-name: api-build
+                repo-token: ${{ secrets.TOKEN }}
+
+            - name: Check if Frontend Build exists
+              id: frontend-build-check
+              uses: sdras/exists-action@master
+              with:
+                job-name: frontend-build
+                repo-token: ${{ secrets.TOKEN }}
+
             - name: SSH Docker Compose
+              if: steps.api-build-check.outputs.exists == 'true' || steps.frontend-build-check.outputs.exists == 'true'
               uses: appleboy/ssh-action@master
               with:
                 host: ${{ secrets.SSH_HOST }}
