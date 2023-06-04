@@ -84,6 +84,7 @@ jobs:
                 tags: ghcr.io/lampspace/sdws-frontend:latest
 
     deployment:
+        name: Deployment
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
