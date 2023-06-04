@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+  api:
+    image: swarm-drones-web-system-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    volumes:
+      - ./api:/var/www/html
+    networks:
+      - sdws-network
+    environment:
+      WWWUSER: '${WWWUSER:-1000}'
+      WWWGROUP: '${WWWGROUP:-1000}'
+  frontend:
+    image: swarm-drones-web-system-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 80:3000
+    networks:
+      - sdws-network
+  postgres:
+    image: debezium/postgres:15-alpine
+    ports:
+      - "5432:5432"
+    command: postgres -c 'max_connections=500'
+    networks:
+      - sdws-network
+    environment:
+      POSTGRES_DB: sdws_database
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+networks:
+  sdws-network:
+    driver: bridge
