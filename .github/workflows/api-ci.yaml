@@ -8,7 +8,7 @@ on:
       - '.github/workflows/api-ci.yaml'
 
 jobs:
-  build:
+  api-build:
     name: API Build
     runs-on: ubuntu-latest
     steps:

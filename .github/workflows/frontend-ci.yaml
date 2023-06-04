@@ -8,7 +8,7 @@ on:
       - '.github/workflows/frontend-ci.yaml'
 
 jobs:
-  Build:
+  frontend-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

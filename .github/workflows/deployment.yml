@@ -1,0 +1,27 @@
+name: Release
+
+on:
+    workflow_run:
+        workflows: ["api-build", "frontend-build"]
+        branches: [master]
+        types:
+            - completed
+jobs:
+    release:
+        if: github.event.workflow_run.conclusion == 'success'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: SSH Docker Compose
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ secrets.SSH_HOST }}
+                username: ${{ secrets.SSH_USERNAME }}
+                password: ${{ secrets.SSH_PASSWORD }}
+                port: ${{ secrets.SSH_PORT }}
+                script: |
+                    cd /home/ubuntu/production
+                    git pull
+                    docker-compose down
+                    docker-compose up -d
