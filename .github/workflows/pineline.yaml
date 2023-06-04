@@ -8,10 +8,27 @@ on:
         - 'frontend/**'
         - '.github/workflows/*' 
 jobs:
+    changes:
+        name: Changes
+        runs-on: ubuntu-latest
+        outputs:
+            api: ${{ steps.changes.outputs.api }}
+            frontend: ${{ steps.changes.outputs.frontend }}
+            workflow: ${{ steps.changes.outputs.workflow }}
+        steps:
+            - uses: actions/checkout@v3
+            - uses: dorny/paths-filter@v2
+              id: changes
+              with:
+                filters: |
+                  api/*
+                  frontend/*
+                  .github/workflows/*
     api-build:
+        needs: changes
+        if: ${{ needs.changes.outputs.api == 'true' }}
         name: API Build
         runs-on: ubuntu-latest
-        if: ${{ github.event_name == 'push' && contains(github.event.paths, 'api/') }}
         steps:
             - name: Checkout
               uses: actions/checkout@v3
@@ -47,9 +64,10 @@ jobs:
                 tags: ghcr.io/lampspace/sdws-api:latest
 
     frontend-build:
+        needs: changes
+        if: ${{ needs.changes.outputs.frontend == 'true' }}
         name: Frontend Build
         runs-on: ubuntu-latest
-        if: ${{ github.event_name == 'push' && contains(github.event.paths, 'frontend') }}
         steps:
             - name: Checkout
               uses: actions/checkout@v3
