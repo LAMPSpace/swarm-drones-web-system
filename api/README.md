@@ -35,34 +35,3 @@ docker exec -it api-service php artisan db:seed
 ```sh
 docker exec -it api-service php artisan test
 ```
-
-8. Create repository
-```sh
-php artisan make:repository repository_name
-```
-
-9. Create repository interface
-```sh
-php artisan make:interface repository_interface_name
-
-Ex: php artisan make:interface CategoryRepositoryInterface
-```
-
-10. Create service
-```sh
-php artisan make:service service_name
-```
-
-11. Create service interface
-```sh
-php artisan make:interface service_interface_name
-
-Ex: php artisan make:interface CategoryServiceInterface
-```
-
-12. Create trait
-```sh
-php artisan make:trait trait_name
-
-Ex: php artisan make:trait UUID
-```
