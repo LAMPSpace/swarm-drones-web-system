@@ -3,10 +3,6 @@ name: Pineline
 on:
     push:
       branches: [master]
-      paths:
-        - 'api/**'
-        - 'frontend/**'
-        - '.github/workflows/*' 
 jobs:
     changes:
         name: Changes
