@@ -10,7 +10,6 @@ jobs:
         outputs:
             api: ${{ steps.changes.outputs.api }}
             frontend: ${{ steps.changes.outputs.frontend }}
-            workflow: ${{ steps.changes.outputs.workflow }}
         steps:
             - uses: actions/checkout@v3
             - uses: dorny/paths-filter@v2
@@ -21,8 +20,6 @@ jobs:
                     - 'api/**'
                   frontend:
                     - 'frontend/**'
-                  workflow:
-                    - '.github/workflows/*'
     api-build:
         needs: changes
         if: ${{ needs.changes.outputs.api == 'true' }}
@@ -104,10 +101,15 @@ jobs:
       needs: [api-build, frontend-build]
       name: Check Deployment
       runs-on: ubuntu-latest
+      outputs:
+        deploy: ${{ steps.check-deployment.outputs.deploy }}
       steps:
-        - name: Set Deployment Flag
-          id: set-deployment-flag
-          run: echo "::set-output name=deploy::${{ needs.api-build.result == 'success' || needs.frontend-build.result == 'success' }}"
+        - name: Check API Build
+          if: ${{ needs.api-build.result == 'success' }}
+          run: echo "::set-output name=deploy::true"
+        - name: Check Frontend Build
+          if: ${{ needs.frontend-build.result == 'success' }}
+          run: echo "::set-output name=deploy::true"
 
     deployment:
         needs: [check-deployment]
