@@ -21,9 +21,12 @@ jobs:
               id: changes
               with:
                 filters: |
-                  api/*
-                  frontend/*
-                  .github/workflows/*
+                  api:
+                    - 'api/**'
+                  frontend:
+                    - 'frontend/**'
+                  workflow:
+                    - '.github/workflows/*'
     api-build:
         needs: changes
         if: ${{ needs.changes.outputs.api == 'true' }}
@@ -102,6 +105,7 @@ jobs:
                 tags: ghcr.io/lampspace/sdws-frontend:latest
 
     deployment:
+        needs: [changes, api-build, frontend-build]
         name: Deployment
         runs-on: ubuntu-latest
         steps:
