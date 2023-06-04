@@ -61,7 +61,7 @@ jobs:
                 push: true
                 tags: ghcr.io/lampspace/sdws-api:latest
             - id: api-ci
-              run: echo "::set-output name=result::success"
+              run: echo "result=success" >> $GITHUB_OUTPUT
 
     frontend-build:
         needs: changes
@@ -103,7 +103,7 @@ jobs:
                 push: true
                 tags: ghcr.io/lampspace/sdws-frontend:latest
             - id: frontend-ci
-              run: echo "::set-output name=result::success"
+              run: echo "result=success" >> $GITHUB_OUTPUT
 
     deployment:
         name: Deployment
