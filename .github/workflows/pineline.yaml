@@ -127,7 +127,6 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v2
         - name: SSH Docker Compose
-          if: steps.api-build-check.outputs.exists == 'true' || steps.frontend-build-check.outputs.exists == 'true'
           uses: appleboy/ssh-action@master
           with:
             host: ${{ secrets.SSH_HOST }}
