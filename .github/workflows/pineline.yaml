@@ -68,4 +68,5 @@ jobs:
               cp frontend/.env.prod frontend/.env
               cp nginx/nginx.conf.prod nginx/nginx.conf
               docker-compose down
+              docker-compose build
               docker-compose up -d
