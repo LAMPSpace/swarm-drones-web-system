@@ -12,6 +12,8 @@ services:
     environment:
       WWWUSER: '${WWWUSER:-1000}'
       WWWGROUP: '${WWWGROUP:-1000}'
+    depends_on:
+        - postgres
   frontend:
     build:
         context: ./frontend
