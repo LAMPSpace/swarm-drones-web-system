@@ -98,41 +98,42 @@ jobs:
                 tags: ghcr.io/lampspace/sdws-frontend:latest
 
     deployment:
-        name: Deployment
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
+      name: Deployment
+      runs-on: ubuntu-latest
+      if: ${{ needs.api-build.result == 'success' || needs.frontend-build.result == 'success' }}
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
 
-            - name: Check if API Build exists
-              id: api-build-check
-              run: |
-                if [ -d "api" ]; then
-                  echo "::set-output name=exists::true"
-                else
-                  echo "::set-output name=exists::false"
-                fi
-            - name: Check if Frontend Build exists
-              id: frontend-build-check
-              run: |
-                if [ -d "frontend" ]; then
-                  echo "::set-output name=exists::true"
-                else
-                  echo "::set-output name=exists::false"
-                fi
+        - name: Check if API Build exists
+          id: api-build-check
+          run: |
+            if [ -d "api" ]; then
+              echo "::set-output name=exists::true"
+            else
+              echo "::set-output name=exists::false"
+            fi
+        - name: Check if Frontend Build exists
+          id: frontend-build-check
+          run: |
+            if [ -d "frontend" ]; then
+              echo "::set-output name=exists::true"
+            else
+              echo "::set-output name=exists::false"
+            fi
 
-            - name: SSH Docker Compose
-              if: steps.api-build-check.outputs.exists == 'true' || steps.frontend-build-check.outputs.exists == 'true'
-              uses: appleboy/ssh-action@master
-              with:
-                host: ${{ secrets.SSH_HOST }}
-                username: ${{ secrets.SSH_USERNAME }}
-                password: ${{ secrets.SSH_PASSWORD }}
-                port: ${{ secrets.SSH_PORT }}
-                
-                script: |
-                    cd /home/ngtrdai/swarm-drones-web-system/
-                    git pull
-                    cp api/.env.prod api/.env
-                    docker-compose down
-                    docker-compose up -d
+        - name: SSH Docker Compose
+          if: steps.api-build-check.outputs.exists == 'true' || steps.frontend-build-check.outputs.exists == 'true'
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            password: ${{ secrets.SSH_PASSWORD }}
+            port: ${{ secrets.SSH_PORT }}
+
+            script: |
+              cd /home/ngtrdai/swarm-drones-web-system/
+              git pull
+              cp api/.env.prod api/.env
+              docker-compose down
+              docker-compose up -d
