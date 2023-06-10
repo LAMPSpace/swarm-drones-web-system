@@ -2,9 +2,9 @@ version: '3.7'
 
 services:
   api:
-    image: ghcr.io/lampspace/sdws-api:latest
-    ports:
-      - 8080:80
+    build:
+        context: ./api
+        dockerfile: Dockerfile
     volumes:
       - ./api:/var/www/html
     networks:
@@ -13,9 +13,9 @@ services:
       WWWUSER: '${WWWUSER:-1000}'
       WWWGROUP: '${WWWGROUP:-1000}'
   frontend:
-    image: ghcr.io/lampspace/sdws-frontend:latest
-    ports:
-      - 80:3000
+    build:
+        context: ./frontend
+        dockerfile: Dockerfile
     networks:
       - sdws-network
   postgres:
@@ -29,6 +29,15 @@ services:
       POSTGRES_DB: sdws_database
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - sdws-network
 networks:
   sdws-network:
     driver: bridge
