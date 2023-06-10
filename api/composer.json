@@ -1,5 +1,5 @@
 {
-    "name": "Swarm Drones Control",
+    "name": "svute/swarm-drones-web-system",
     "type": "project",
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
