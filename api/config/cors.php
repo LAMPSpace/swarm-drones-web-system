@@ -20,8 +20,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        env('FRONTEND_URL', 'http://drones.svute.com'),
-        'http://146.190.106.252',
+        env('FRONTEND_URL', 'http://drones.svute.com')
     ],
 
     'allowed_origins_patterns' => [],
