@@ -25,7 +25,7 @@ export default function Login() {
         middleware: "guest",
         redirectIfAuthenticated: "/",
     });
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [remember, setRemember] = useState(false);
     const [errors, setErrors] = useState({});
@@ -35,7 +35,7 @@ export default function Login() {
         e.preventDefault();
 
         await login({
-            email,
+            username,
             password,
             remember: remember,
             setErrors,
@@ -65,18 +65,18 @@ export default function Login() {
                                             <Card.Body className="p-lg-5">
                                                 <Form onSubmit={submitLogin}>
                                                     <Form.Group className="form-group">
-                                                        <Label htmlFor="i-email">ĐỊA CHỈ E-MAIL</Label>
+                                                        <Label htmlFor="i-username">TÀI KHOẢN</Label>
                                                         <InputText
-                                                            id="i-email"
-                                                            name="email"
-                                                            type="email"
-                                                            placeholder="Nhập địa chỉ e-mail"
-                                                            className={`form-control ${errors.email ? "is-invalid" : ""}`}
-                                                            value={email}
-                                                            onChange={(e) => setEmail(e.target.value)}
+                                                            id="i-username"
+                                                            name="username"
+                                                            type="text"
+                                                            placeholder="Nhập tài khoản đăng nhập "
+                                                            className={`form-control ${errors.username ? "is-invalid" : ""}`}
+                                                            value={username}
+                                                            onChange={(e) => setUsername(e.target.value)}
                                                             autoFocus
                                                         />
-                                                        <InputError message={errors.email} />
+                                                        <InputError message={errors.username} />
                                                     </Form.Group>
                                                     <Form.Group className="form-group">
                                                         <Label htmlFor="i-password">MẬT KHẨU</Label>

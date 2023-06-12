@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('drones', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('username')->unique();
-            $table->string('email')->unique();
-            $table->enum('is_admin', ['N', 'Y'])->default('N');
-            $table->string('password');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->rememberToken();
+            $table->string('image', 512)->nullable();
+            $table->enum('is_connected', ['N', 'Y'])->default('N');
+            $table->foreignId('swarm_id')->constrained('swarms');
+            $table->foreignId('master_id')->constrained('drones');
+            $table->json('last_location')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('drones');
     }
 };

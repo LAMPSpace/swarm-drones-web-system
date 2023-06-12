@@ -2,8 +2,9 @@ version: '3.7'
 
 services:
   api:
+    container_name: sdws-api
     build:
-        context: ./api
+        context: api
         dockerfile: Dockerfile
     volumes:
       - ./api:/var/www/html
@@ -15,12 +16,14 @@ services:
     depends_on:
         - postgres
   frontend:
+    container_name: sdws-frontend
     build:
         context: ./frontend
         dockerfile: Dockerfile
     networks:
       - sdws-network
   postgres:
+    container_name: sdws-postgres
     image: debezium/postgres:15-alpine
     ports:
       - "5432:5432"
@@ -31,25 +34,20 @@ services:
       POSTGRES_DB: sdws_database
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-  certbot:
-    build:
-      context: ./certbot
-      dockerfile: Dockerfile
-    volumes:
-      - ./certbot:/etc/letsencrypt
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-    networks:
-      - sdws-network
   nginx:
+    container_name: sdws-nginx
     image: nginx:latest
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./certbot:/var/www/html
     ports:
       - "80:80"
       - "443:443"
     networks:
       - sdws-network
+    depends_on:
+        - api
+        - frontend
+        - postgres
 networks:
   sdws-network:
     driver: bridge
