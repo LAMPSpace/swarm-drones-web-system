@@ -121,7 +121,7 @@ export default function Home() {
 		return (
 			<>
 				<HeadCustom title="Trang chủ | HCMUTE Swarm Drones Control" description="Trang chủ | HCMUTE Swarm Drones Control" />
-				<MainLayout sbMenuList={sbMenuList}>
+				<MainLayout sbMenuList={sbMenuList} isFrontModule={true}>
 					{renderMainTitle()}
 					<MainBodyWrap>
 						{renderOverview()}

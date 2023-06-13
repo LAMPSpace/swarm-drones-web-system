@@ -8,7 +8,7 @@ import Footer from "./Shared/Footer";
 import SidebarWrap from "./Shared/SidebarWrap";
 import Sidebar from "./Shared/Sidebar";
 
-export default function MainLayout({ sbMenuList, children }) {
+export default function MainLayout({ sbMenuList, isFrontModule = true, children }) {
     const router = useRouter();
     const { logout, user } = useAuth({
         middleware: "auth",
@@ -16,7 +16,7 @@ export default function MainLayout({ sbMenuList, children }) {
 
     return (
         <>
-            <SidebarWrap user={user} logout={logout}>
+            <SidebarWrap user={user} logout={logout} isFrontModule={isFrontModule}>
                 <Sidebar menuList={sbMenuList} />
             </SidebarWrap>
             <div className="d-flex flex-column flex-fill content">

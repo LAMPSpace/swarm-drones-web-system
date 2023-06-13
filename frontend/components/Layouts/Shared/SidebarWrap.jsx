@@ -4,10 +4,11 @@ import MainHeader from "./MainHeader";
 import { Image } from "react-bootstrap";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { MdLogout } from "react-icons/md";
+import { MdLogout, MdAdminPanelSettings, MdHome } from "react-icons/md";
 import HCMUTELogo from "./HCMUTELogo";
+import { IS_ADMIN} from "@/components/Constants/common.constant";
 
-export default function SidebarWrap({ children, user, logout }) {
+export default function SidebarWrap({ children, user, isFrontModule, logout }) {
     const [showSidebar, setShowSidebar] = useState(false);
 
     return (
@@ -30,6 +31,33 @@ export default function SidebarWrap({ children, user, logout }) {
                         <div className="py-3 pl-4 pr-0 font-weight-medium text-muted text-uppercase flex-grow-1">
                             BẢNG ĐIỀU KHIỂN
                         </div>
+                        {user.is_admin === IS_ADMIN && (
+                            <div className="px-4 py-2">
+                                {isFrontModule ? (
+                                    <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip id="tooltip-direct">Bảng điều khiển</Tooltip>}
+                                    >
+                                        <Link href={"/dashboard"}>
+                                            <span className="d-flex align-items-center">
+                                                <MdAdminPanelSettings className="width-4 height-4 fill-current" />
+                                            </span>
+                                        </Link>
+                                    </OverlayTrigger>
+                                ) : (
+                                    <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip id="tooltip-direct">Trang chủ</Tooltip>}
+                                    >
+                                        <Link href={"/"}>
+                                            <span className="d-flex align-items-center">
+                                                <MdHome className="width-4 height-4 fill-current"/>
+                                            </span>
+                                        </Link>
+                                    </OverlayTrigger>
+                                )}
+                            </div>
+                        )}
                     </div>
                     <div className="sidebar-section flex-grow-1 overflow-auto sidebar">
                         {children}
