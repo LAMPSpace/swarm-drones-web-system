@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { debounce } from 'lodash'
 import axios from '@/lib/axios'
 import {
@@ -6,8 +6,7 @@ import {
     DEFAULT_SORT_ORDER,
     DEFAULT_PER_PAGE
 } from "@/components/Constants/common.constant";
-import {useRef} from "react/index";
-import {FaAngleDown, FaAngleUp} from "react-icons/all";
+import {FaAngleDown, FaAngleUp} from "react-icons/fa";
 import Paginator from "@/components/Generals/DataTable/Paginator";
 
 const DataTable = ({ columns, fetchUrl, title='Tiêu đề' }) => {
@@ -36,7 +35,7 @@ const DataTable = ({ columns, fetchUrl, title='Tiêu đề' }) => {
             setSearch(value)
             setCurrentPage(1)
             setSortOrder(DEFAULT_SORT_ORDER)
-            setSortColumn(columns[0])
+            setSortColumn(columns[0].id)
         }, 500)
     ).current
 
