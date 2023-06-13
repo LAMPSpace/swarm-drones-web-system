@@ -53,8 +53,8 @@ export const ADMIN_MENU_LIST = [
     {
         title: 'Quản lý người dùng',
         name: 'users',
-        path: '#',
-        icon: FaUsers,
+        path: '/users',
+        icon: FaUserFriends,
         subMenu: [
             {
                 title: 'Danh sách người dùng',

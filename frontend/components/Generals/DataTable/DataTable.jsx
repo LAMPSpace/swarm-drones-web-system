@@ -15,7 +15,7 @@ const DataTable = ({ columns, fetchUrl, title='Tiêu đề' }) => {
     const [sortColumn, setSortColumn] = useState(columns[0].id)
     const [sortOrder, setSortOrder] = useState(DEFAULT_SORT_ORDER)
     const [search, setSearch] = useState("")
-    const [pagination, setPagination] = useState({})
+    let [pagination, setPagination] = useState({})
     const [currentPage, setCurrentPage] = useState(1)
     const [loading, setLoading] = useState(true)
 
@@ -55,7 +55,8 @@ const DataTable = ({ columns, fetchUrl, title='Tiêu đề' }) => {
                 page: currentPage,
             }
             const { data } = await axios.get(fetchUrl, { params })
-            setData(data)
+            setData(data.data)
+            setPagination(data.meta)
             setTimeout(() => {
                 setLoading(false)
             }, 300)

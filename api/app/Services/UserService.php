@@ -15,6 +15,12 @@ class UserService
 
     public function get()
     {
-        return $this->user::all();
+        return $this->user::paginate(10);
+    }
+
+    public function store(array $data)
+    {
+        $data['password'] = bcrypt($data['password']);
+        return $this->user::create($data);
     }
 }

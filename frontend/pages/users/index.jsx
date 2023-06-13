@@ -76,6 +76,7 @@ const UserList = () => {
                 <MainLayout sbMenuList={sbMenuList} isFrontModule={false}>
                     <MainBodyWrap>
                         <DataTable
+                            title="DANH SÁCH NGƯỜI DÙNG"
                             fetchUrl={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users`}
                             columns={columns}
                             actions={actions}

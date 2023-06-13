@@ -1,7 +1,29 @@
 import { useEffect, useState } from "react";
 
+const OFFSET = 4
+
 const Paginator = ({ pagination, pageChanged, totalItems }) => {
     const [pageNumbers, setPageNumbers] = useState([])
+
+    useEffect(() => {
+        const setPaginationPages = () => {
+            let pages = []
+            const { last_page, current_page, from, to } = pagination
+            if (!to) return []
+            let fromPage = current_page - OFFSET
+            if (fromPage < 1) fromPage = 1
+            let toPage = fromPage + OFFSET * 2
+            if (toPage >= last_page) {
+                toPage = last_page
+            }
+            for (let page = fromPage; page <= toPage; page++) {
+                pages.push(page)
+            }
+            setPageNumbers(pages)
+        }
+
+        setPaginationPages()
+    }, [pagination])
 
     return (
         <div className={"row"}>

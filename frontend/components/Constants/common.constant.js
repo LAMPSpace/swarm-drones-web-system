@@ -12,3 +12,11 @@ export const SORT_ORDER = {
 }
 export const DEFAULT_SORT_ORDER = SORT_ORDER.ASC;
 export const DEFAULT_PER_PAGE = 10;
+
+// TOAST SETTINGS
+export const TOAST_SETTINGS = {
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: true,
+    closeButton: true,
+}
