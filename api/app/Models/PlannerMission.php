@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class PlannerMission extends Model
 {
     use HasFactory;
+
+
+
+    protected $fillable = [
+        'name',
+        'swarm_id',
+        'waypoints',
+        'status',
+        'config'
+    ];
 }

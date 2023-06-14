@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\PlannerMissionController;
+use App\Http\Controllers\SwarmController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,5 +22,7 @@ Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
 });
 
 Route::resource('users', UserController::class)->middleware('auth:sanctum');
+Route::resource('swarms', SwarmController::class)->middleware('auth:sanctum');
+Route::resource('planner-missions', PlannerMissionController::class)->middleware('auth:sanctum');
 
 require_once __DIR__ . '/auth.php';

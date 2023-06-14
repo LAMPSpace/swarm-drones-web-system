@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('swarms', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('ip_address', 64)->nullable();
             $table->string('image', 512)->nullable();
             $table->enum('is_connected', ['N', 'Y'])->default('N');
             $table->json('config')->nullable();

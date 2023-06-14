@@ -108,14 +108,18 @@ const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [] }) =>
                                     )
                                 })}
                                 {actions.length > 0 && (
-                                    <th>HÀNH ĐỘNG</th>
+                                    <th
+                                        className={"text-center"}
+                                    >HÀNH ĐỘNG</th>
                                 )}
                             </tr>
                         </thead>
                         <tbody>
                             {data.length === 0 && (
                                 <tr>
-                                    <td className={"text-center"} colSpan={columns.length}>Không có dữ liệu</td>
+                                    <td className={"text-center"} colSpan={
+                                        actions.length > 0 ? columns.length + 1 : columns.length
+                                    }>Không có dữ liệu</td>
                                 </tr>
                             )}
 
@@ -125,13 +129,19 @@ const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [] }) =>
                                         <tr key={index}>
                                             {columns.map((column, index) => {
                                                 return (
-                                                    <td key={index}>
+                                                    <td
+                                                        key={index}
+                                                        align={column.align ? column.align : "left"}
+                                                        className={column.className ? column.className : ""}
+                                                    >
                                                         {column.render ? column.render(item) : item[column.id]}
                                                     </td>
                                                 )
                                             })}
                                             {actions.length > 0 && (
-                                                <td>
+                                                <td
+                                                    align={"center"}
+                                                >
                                                     {actions.map((action, index) => {
                                                         return (
                                                             <button
@@ -150,7 +160,9 @@ const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [] }) =>
                                 })
                             ) : (
                                 <tr>
-                                    <td colSpan={columns.length + 1}>
+                                    <td colSpan={
+                                        actions.length > 0 ? columns.length + 1 : columns.length
+                                    }>
                                         <div className="d-flex justify-content-center">
                                             <div className="spinner-border text-primary" style={loaderStyle} role="status">
                                                 <span className="sr-only">Đang tải dữ liệu...</span>

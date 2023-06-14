@@ -3,7 +3,8 @@ const NO = 'N';
 
 export const IS_ADMIN = YES;
 export const IS_NORMAL_USER = NO;
-export const USER_PERMISSIONS = ['admin', 'user'];
+export const IS_CONNECTED = YES;
+export const IS_DISCONNECTED = NO;
 
 // DATA TABLE
 export const SORT_ORDER = {

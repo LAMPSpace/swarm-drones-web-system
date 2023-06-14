@@ -34,7 +34,7 @@ export const USER_MENU_LIST = [
                 title: 'Danh sách Swarms',
                 name: 'swarms-list',
                 path: '/swarms',
-                icon: GiMissileSwarm
+                icon: TbDrone
             },
             {
                 title: 'Thêm mới Swarm',
@@ -45,44 +45,10 @@ export const USER_MENU_LIST = [
         ]
     },
     {
-        title: 'Quản lý Drones',
-        name: 'drones',
-        path: '#',
-        icon: TbDrone,
-        subMenu: [
-            {
-                title: 'Danh sách Drones',
-                name: 'drones-list',
-                path: '/drones',
-                icon: TbDrone
-            },
-            {
-                title: 'Thêm mới Drones',
-                name: 'drones-add',
-                path: '/swarms/add',
-                icon: IoAddCircle
-            }
-        ]
-    },
-    {
-        title: 'Quản lý Missions',
-        name: 'missions',
-        path: '#',
-        icon: GiTreasureMap,
-        subMenu: [
-            {
-                title: 'Danh sách Missions',
-                name: 'missions-list',
-                path: '/missions',
-                icon: GiTreasureMap
-            },
-            {
-                title: 'Thêm mới Missions',
-                name: 'missions-add',
-                path: '/missions/add',
-                icon: IoAddCircle
-            }
-        ]
+        title: 'Danh sách Missions',
+        name: 'missions-list',
+        path: '/missions',
+        icon: GiTreasureMap
     },
     {
         title: 'GPS',
