@@ -1,4 +1,9 @@
 # **Swarm Drone Websystem**
+[![CI/CD](https://github.com/LAMPSpace/swarm-drones-web-system/actions/workflows/pineline.yaml/badge.svg?branch=master)](https://github.com/LAMPSpace/swarm-drones-web-system/actions/workflows/pineline.yaml)
+
+**Web system for controlling swarm drones and monitoring their status.**
+
+**[Swarm Drone Websystem](http://drones.svute.com)**
 
 ## **Getting Started**
 ### **Prerequisites**
