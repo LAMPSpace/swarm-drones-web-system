@@ -9,7 +9,7 @@ import {
 import {FaAngleDown, FaAngleUp} from "react-icons/fa";
 import Paginator from "@/components/Generals/DataTable/Paginator";
 
-const DataTable = ({ columns, fetchUrl, title='Tiêu đề' }) => {
+const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [] }) => {
     const [data, setData] = useState([])
     const [perPage, setPerPage] = useState(DEFAULT_PER_PAGE)
     const [sortColumn, setSortColumn] = useState(columns[0].id)
@@ -105,6 +105,11 @@ const DataTable = ({ columns, fetchUrl, title='Tiêu đề' }) => {
                                         </th>
                                     )
                                 })}
+                                {actions.length > 0 ? (
+                                    <th>HÀNH ĐỘNG</th>
+                                ) : (
+                                    ""
+                                )}
                             </tr>
                         </thead>
                         <tbody>
@@ -125,6 +130,23 @@ const DataTable = ({ columns, fetchUrl, title='Tiêu đề' }) => {
                                                     <td key={index}>{item[column.id]}</td>
                                                 )
                                             })}
+                                            {actions.length > 0 ? (
+                                                <td>
+                                                    {actions.map((action, index) => {
+                                                        return (
+                                                            <button
+                                                                key={index}
+                                                                className={"btn btn-sm btn-outline-primary"}
+                                                                onClick={(e) => action.onClick(item)}
+                                                            >
+                                                                {action.label}
+                                                            </button>
+                                                        )
+                                                    })}
+                                                </td>
+                                            ) : (
+                                                ""
+                                            )}
                                         </tr>
                                     )
                                 })

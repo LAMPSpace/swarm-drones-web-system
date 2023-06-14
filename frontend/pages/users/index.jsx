@@ -49,20 +49,23 @@ const UserList = () => {
     const actions = [
         {
             type: "view",
-            onClick: (id) => {
-                console.log(id);
+            label: "Xem",
+            onClick: (data) => {
+                console.log(data);
             }
         },
         {
             type: "edit",
-            onClick: (id) => {
-                console.log(id)
+            label: "Sửa",
+            onClick: (data) => {
+                console.log(data)
             }
         },
         {
             type: "delete",
-            onClick: (id) => {
-                console.log(id)
+            label: "Xóa",
+            onClick: (data) => {
+                console.log(data)
             }
         }
     ]
