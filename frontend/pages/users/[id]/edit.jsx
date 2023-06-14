@@ -1,26 +1,35 @@
-import {useRouter} from "next/router";
-import {useAuth} from "@/hooks/auth";
-import {useEffect, useState} from "react";
-import {IS_ADMIN, IS_NORMAL_USER, TOAST_SETTINGS} from "@/components/Constants/common.constant";
+import { useRouter } from 'next/router';
+import { userService } from '@/services/users';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/auth';
+import {IS_ADMIN, IS_NORMAL_USER, TOAST_SETTINGS} from '@/components/Constants/common.constant';
+import { ADMIN_MENU_LIST } from '@/components/Constants/menu-list.constant';
+import { toast } from 'react-toastify';
+import Loading from "@/components/Layouts/Shared/Loading";
 import HeadCustom from "@/components/Layouts/Shared/HeadCustom";
 import MainLayout from "@/components/Layouts/MainLayout";
 import MainBodyWrap from "@/components/Layouts/Shared/MainBodyWrap";
-import Loading from "@/components/Layouts/Shared/Loading";
-import {ADMIN_MENU_LIST} from "@/components/Constants/menu-list.constant";
 import {Button, Card, Form} from "react-bootstrap";
 import Label from "@/components/Forms/Label";
 import InputText from "@/components/Forms/InputText";
 import InputError from "@/components/Forms/InputError";
-import {userService} from "@/services/users";
-import {toast} from "react-toastify";
+import Link from "next/link";
 
-const AddUser = () => {
-    const router = useRouter()
+const ShowUser = () => {
+    const router = useRouter();
+    const { id } = router.query;
     const { user } = useAuth({
         middleware: "auth"
     })
+    const { find, update } = userService();
+    const [data, setData] = useState(null);
+    const [error, setError] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [status, setStatus] = useState(null);
 
-    const { add } = userService()
+    const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
+    const [is_admin, setIsAdmin] = useState(IS_NORMAL_USER);
 
     useEffect(() => {
         if (user) {
@@ -28,58 +37,73 @@ const AddUser = () => {
                 router.push('/403')
             }
         }
-    }, [user])
+    }, [user, router])
 
-    const [name, setName] = useState("")
-    const [username, setUsername] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [passwordConfirmation, setPasswordConfirmation] = useState("")
-    const [is_admin, setIsAdmin] = useState(IS_NORMAL_USER)
-    const [errors, setErrors] = useState({});
-    const [status, setStatus] = useState(null)
-
-    const submitHandler = async (e) => {
-        e.preventDefault()
-        if (password !== passwordConfirmation) {
-            setErrors(
-                {
-                    password_confirmation: ["Mật khẩu xác nhận không khớp"]
+    useEffect(() => {
+        if (id && user?.is_admin === IS_ADMIN) {
+            find({
+                id,
+                setUser: setData,
+                setError,
+                setStatus,
+            }).then(
+                () => {
+                    setName(data?.name);
+                    setIsAdmin(data?.is_admin);
                 }
             )
-            return false
         }
+    }, [id, user]);
 
-        await add({
+    useEffect(() => {
+        if (error) {
+            router.push("/users").then(r => toast.error("Không tìm thấy người dùng", TOAST_SETTINGS))
+
+        }
+    }, [error, router]);
+
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        await update({
+            id,
             name,
-            username,
-            email,
             password,
             is_admin,
             setErrors,
-            setStatus,
+            setStatus
         })
     }
 
-    useEffect(() => {
-        if (status) {
-            toast.success('Tạo người dùng thành công', TOAST_SETTINGS)
-            router.push('/users')
-        }
-    }, [status])
+
+    const renderIsNotAuthenticated = () => {
+        return (
+            <Loading />
+        )
+    }
 
     const renderIsAuthenticated = (user, sbMenuList) => {
         return (
             <>
                 <HeadCustom
-                    title="Thêm người dùng | HCMUTE Swarm Drones Control"
-                    description="Thêm người dùng | HCMUTE Swarm Drones Control" />
+                    title={`${data?.name} | Chỉnh sửa | HCMUTE Swarm Drones Control`}
+                    description={`${data?.name} | Chỉnh sửa | HCMUTE Swarm Drones Control`} />
                 <MainLayout sbMenuList={sbMenuList} isFrontModule={false}>
                     <MainBodyWrap>
                         <Card className={"border-0 shadow-sm"}>
-                            <Card.Header>
-                                <div className={"font-weight-medium py-1"}>
-                                    THÊM NGƯỜI DÙNG
+                            <Card.Header className={"align-items-center"}>
+                                <div className={"row"}>
+                                    <div className={"col"}>
+                                        <div className={"font-weight-medium py-1"}>
+                                            Chỉnh sửa người dùng
+                                        </div>
+                                    </div>
+                                    <div className={"col-auto"}>
+                                        <Link href={"/users"}>
+                                            <button className={"btn btn-outline-primary btn-sm"}>
+                                                Quay lại
+                                            </button>
+                                        </Link>
+                                    </div>
                                 </div>
                             </Card.Header>
                             <Card.Body>
@@ -102,29 +126,21 @@ const AddUser = () => {
                                         <Label htmlFor={"username"}>Tài khoản</Label>
                                         <InputText
                                             id={"username"}
-                                            name={"username"}
                                             type={"text"}
                                             placeholder={"Nhập tài khoản"}
-                                            value={username}
-                                            className={`form-control ${errors.username ? "is-invalid" : ""}`}
-                                            onChange={(e) => setUsername(e.target.value)}
-                                            required={true}
+                                            value={data?.username}
+                                            disabled={true}
                                         />
-                                        <InputError message={errors.username} />
                                     </Form.Group>
                                     <Form.Group className={"mb-2"}>
                                         <Label htmlFor={"email"}>Địa chỉ Email</Label>
                                         <InputText
                                             id={"email"}
-                                            name={"email"}
                                             type={"email"}
                                             placeholder={"Nhập địa chỉ email"}
-                                            value={email}
-                                            className={`form-control ${errors.email ? "is-invalid" : ""}`}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            required={true}
+                                            value={data?.email}
+                                            disabled={true}
                                         />
-                                        <InputError message={errors.email} />
                                     </Form.Group>
                                     <Form.Group className={"mb-2"}>
                                         <Label htmlFor={"password"}>Mật khẩu</Label>
@@ -136,23 +152,8 @@ const AddUser = () => {
                                             value={password}
                                             className={`form-control ${errors.password ? "is-invalid" : ""}`}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            required={true}
                                         />
                                         <InputError message={errors.password} />
-                                    </Form.Group>
-                                    <Form.Group className={"mb-2"}>
-                                        <Label htmlFor={"passwordConfirmation"}>Xác nhận mật khẩu</Label>
-                                        <InputText
-                                            id={"i-passwordConfirmation"}
-                                            name={"password_confirmation"}
-                                            type={"password"}
-                                            placeholder={"Nhập lại mật khẩu"}
-                                            value={passwordConfirmation}
-                                            className={`form-control ${errors.password_confirmation ? "is-invalid" : ""}`}
-                                            onChange={(e) => setPasswordConfirmation(e.target.value)}
-                                            required={true}
-                                        />
-                                        <InputError message={errors.password_confirmation} />
                                     </Form.Group>
                                     <Form.Group className={"mb-3"}>
                                         <Label htmlFor={"is_admin"}>Quyền</Label>
@@ -170,7 +171,7 @@ const AddUser = () => {
                                     </Form.Group>
                                     <Form.Group>
                                         <Button className={"btn btn-primary"} type={"submit"}>
-                                            Thêm
+                                            Chỉnh sửa
                                         </Button>
                                     </Form.Group>
                                 </Form>
@@ -182,17 +183,11 @@ const AddUser = () => {
         )
     }
 
-    const renderIsNotAuthenticated = () => {
-        return (
-            <Loading />
-        )
-    }
-
     return (
         <>
-            {(user && user?.is_admin === IS_ADMIN) ? renderIsAuthenticated(user, ADMIN_MENU_LIST) : renderIsNotAuthenticated()}
+            {(data && user?.is_admin === IS_ADMIN) ? renderIsAuthenticated(user, ADMIN_MENU_LIST) : renderIsNotAuthenticated()}
         </>
     )
-}
+};
 
-export default AddUser
+export default ShowUser;

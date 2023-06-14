@@ -4,7 +4,7 @@ import { decode } from 'base-64';
 const axios = Axios.create({
     baseURL: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000',
     headers: {
-        'X-Requested-With': 'XMLHttpRequest'
+        'Accept': 'application/json',
     },
     withCredentials: false,
 })
@@ -18,5 +18,4 @@ axios.interceptors.request.use(config => {
 
     return config;
 })
-
 export default axios;

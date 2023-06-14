@@ -39,10 +39,9 @@ const UserList = () => {
         {
             id: "is_admin",
             label: "Quyền",
-        },
-        {
-            id: "created_at",
-            label: "Ngày tạo",
+            render: (data) => {
+                return data.is_admin === IS_ADMIN ? "Admin" : "Người dùng"
+            }
         }
     ]
 
@@ -50,20 +49,23 @@ const UserList = () => {
         {
             type: "view",
             label: "Xem",
+            className: "btn btn-primary mr-2",
             onClick: (data) => {
-                console.log(data);
+                router.push(`/users/${data.id}`)
             }
         },
         {
             type: "edit",
             label: "Sửa",
+            className: "btn btn-secondary mr-2",
             onClick: (data) => {
-                console.log(data)
+                router.push(`/users/${data.id}/edit`)
             }
         },
         {
             type: "delete",
             label: "Xóa",
+            className: "btn btn-danger",
             onClick: (data) => {
                 console.log(data)
             }
@@ -98,7 +100,7 @@ const UserList = () => {
 
     return (
         <>
-            {user ? renderIsAuthenticated(user, ADMIN_MENU_LIST) : renderIsNotAuthenticated()}
+            {(user && user?.is_admin === IS_ADMIN) ? renderIsAuthenticated(user, ADMIN_MENU_LIST) : renderIsNotAuthenticated()}
         </>
     )
 }

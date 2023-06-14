@@ -37,16 +37,18 @@ const Paginator = ({ pagination, pageChanged, totalItems }) => {
                     <ul className={"pagination"}>
                         <li
                             className={"page-item " + (pagination?.current_page === 1 ? "disabled" : "")}
+                            role="button"
                         >
                             <span className={"page-link"}>
-                                Previous
+                                Trước
                             </span>
                         </li>
                         <li
                             className={"page-item " + (pagination?.current_page === pagination?.last_page ? "disabled" : "")}
+                            role="button"
                         >
                             <span className={"page-link"}>
-                                Next
+                                Sau
                             </span>
                         </li>
                     </ul>
@@ -56,8 +58,9 @@ const Paginator = ({ pagination, pageChanged, totalItems }) => {
                         <li
                             className={"page-item " + (pagination?.current_page === 1 ? "disabled" : "")}
                             onClick={() => pageChanged(pagination?.current_page - 1)}
-                            aria-label={"« Previous"}
+                            aria-label={"« Trước"}
                             aria-disabled={true}
+                            role="button"
                         >
                             <span className={"page-link"} aria-hidden={true}>«</span>
                         </li>
@@ -67,6 +70,7 @@ const Paginator = ({ pagination, pageChanged, totalItems }) => {
                                     key={index}
                                     className={"page-item " + (pagination?.current_page === page ? "active" : "")}
                                     onClick={() => pageChanged(page)}
+                                    role="button"
                                 >
                                     <span className={"page-link"}>{page}</span>
                                 </li>
@@ -75,8 +79,9 @@ const Paginator = ({ pagination, pageChanged, totalItems }) => {
                         <li
                             className={"page-item " + (pagination?.current_page === pagination?.last_page ? "disabled" : "")}
                             onClick={() => pageChanged(pagination?.current_page + 1)}
-                            aria-label={"Next »"}
+                            aria-label={"Sau »"}
                             aria-disabled={true}
+                            role="button"
                         >
                             <span className={"page-link"} aria-hidden={true}>»</span>
                         </li>

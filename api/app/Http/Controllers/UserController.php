@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddUserRequest;
+use App\Http\Requests\DataTableRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -21,10 +22,10 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function index()
+    public function index(DataTableRequest $request)
     {
         $this->authorize('viewAny', User::class);
-        return new UserCollection($this->userService->get());
+        return new UserCollection($this->userService->get($request->all()));
     }
 
     public function store(AddUserRequest $request)
@@ -41,7 +42,14 @@ class UserController extends Controller
 
     public function show($id)
     {
-        //
+        $user = $this->userService->show($id);
+        
+        if (!$user) {
+            return $this->error('Không tìm thấy người dùng', 404);
+        }
+        
+        $this->authorize('view', $user);
+        return $this->success(new UserResource($user));
     }
 
     public function update(Request $request, $id)

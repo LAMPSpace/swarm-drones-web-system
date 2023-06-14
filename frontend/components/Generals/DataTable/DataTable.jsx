@@ -86,39 +86,37 @@ const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [] }) =>
             </div>
             <div className={"card-body"}>
                 <div className="table-responsive">
-                    <table className="table table-bordered table-hover">
-                        <thead className={"table-dark"}>
+                    <table className="table table-bordered">
+                        <thead className={"table"}>
                             <tr>
                                 {columns.map((column, index) => {
                                     return (
-                                        <th key={column.id} onClick={(e) => handleSort(column.id)}>
-                                            {column.label.toUpperCase()}
-                                            {column.id === sortColumn ? (
+                                        <th key={column.id} onClick={(e) => handleSort(column.id)} role="button">
+                                            <div className="d-flex justify-content-between align-items-center">
+                                                <span>{column.label.toUpperCase()}</span>
+                                                {column.id === sortColumn && (
                                                 <span>
                                                     {sortOrder === SORT_ORDER.ASC ? (
-                                                        <FaAngleUp className={"ms-1"} />
+                                                        <FaAngleUp className="ms-1" />
                                                     ) : (
-                                                        <FaAngleDown className={"ms-1"} />
+                                                        <FaAngleDown className="ms-1" />
                                                     )}
                                                 </span>
-                                            ) : null}
+                                                )}
+                                            </div>
                                         </th>
                                     )
                                 })}
-                                {actions.length > 0 ? (
+                                {actions.length > 0 && (
                                     <th>HÀNH ĐỘNG</th>
-                                ) : (
-                                    ""
                                 )}
                             </tr>
                         </thead>
                         <tbody>
-                            {data.length === 0 ? (
+                            {data.length === 0 && (
                                 <tr>
                                     <td className={"text-center"} colSpan={columns.length}>Không có dữ liệu</td>
                                 </tr>
-                            ) : (
-                                ""
                             )}
 
                             {!loading ? (
@@ -127,16 +125,18 @@ const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [] }) =>
                                         <tr key={index}>
                                             {columns.map((column, index) => {
                                                 return (
-                                                    <td key={index}>{item[column.id]}</td>
+                                                    <td key={index}>
+                                                        {column.render ? column.render(item) : item[column.id]}
+                                                    </td>
                                                 )
                                             })}
-                                            {actions.length > 0 ? (
+                                            {actions.length > 0 && (
                                                 <td>
                                                     {actions.map((action, index) => {
                                                         return (
                                                             <button
                                                                 key={index}
-                                                                className={"btn btn-sm btn-outline-primary"}
+                                                                className={`${action.className? action.className : "btn btn-sm btn-primary"}`}
                                                                 onClick={(e) => action.onClick(item)}
                                                             >
                                                                 {action.label}
@@ -144,15 +144,13 @@ const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [] }) =>
                                                         )
                                                     })}
                                                 </td>
-                                            ) : (
-                                                ""
                                             )}
                                         </tr>
                                     )
                                 })
                             ) : (
                                 <tr>
-                                    <td colSpan={columns.length}>
+                                    <td colSpan={columns.length + 1}>
                                         <div className="d-flex justify-content-center">
                                             <div className="spinner-border text-primary" style={loaderStyle} role="status">
                                                 <span className="sr-only">Đang tải dữ liệu...</span>
