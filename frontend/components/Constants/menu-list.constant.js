@@ -1,12 +1,21 @@
 import { 
     RiHomeSmileLine,
-    RiGpsFill,
 } from "react-icons/ri";
 import {
-    FaUsers,
     FaUserFriends,
-    FaUserPlus
+    FaUserPlus,
+    FaMapMarkedAlt
 } from "react-icons/fa";
+import {
+    GiMissileSwarm,
+    GiTreasureMap
+} from "react-icons/gi";
+import {
+    TbDrone
+} from "react-icons/tb";
+import {
+    IoAddCircle
+} from "react-icons/io5";
 
 export const USER_MENU_LIST = [
     {
@@ -16,22 +25,62 @@ export const USER_MENU_LIST = [
         icon: RiHomeSmileLine
     },
     {
-        title: 'Quản lý UAVs',
-        name: 'uavs',
+        title: 'Quản lý Swarms',
+        name: 'swarms',
         path: '#',
-        icon: RiGpsFill,
+        icon: GiMissileSwarm,
         subMenu: [
             {
-                title: 'Danh sách UAVs',
-                name: 'uavs-list',
-                path: '/uavs',
-                icon: RiGpsFill
+                title: 'Danh sách Swarms',
+                name: 'swarms-list',
+                path: '/swarms',
+                icon: GiMissileSwarm
             },
             {
-                title: 'Thêm mới UAVs',
-                name: 'uavs-add',
-                path: '/uavs/add',
-                icon: RiGpsFill
+                title: 'Thêm mới Swarm',
+                name: 'swarms-add',
+                path: '/swarms/add',
+                icon: IoAddCircle
+            }
+        ]
+    },
+    {
+        title: 'Quản lý Drones',
+        name: 'drones',
+        path: '#',
+        icon: TbDrone,
+        subMenu: [
+            {
+                title: 'Danh sách Drones',
+                name: 'drones-list',
+                path: '/drones',
+                icon: TbDrone
+            },
+            {
+                title: 'Thêm mới Drones',
+                name: 'drones-add',
+                path: '/swarms/add',
+                icon: IoAddCircle
+            }
+        ]
+    },
+    {
+        title: 'Quản lý Missions',
+        name: 'missions',
+        path: '#',
+        icon: GiTreasureMap,
+        subMenu: [
+            {
+                title: 'Danh sách Missions',
+                name: 'missions-list',
+                path: '/missions',
+                icon: GiTreasureMap
+            },
+            {
+                title: 'Thêm mới Missions',
+                name: 'missions-add',
+                path: '/missions/add',
+                icon: IoAddCircle
             }
         ]
     },
@@ -39,7 +88,7 @@ export const USER_MENU_LIST = [
         title: 'GPS',
         name: 'gps',
         path: '/gps',
-        icon: RiGpsFill
+        icon: FaMapMarkedAlt
     },
 ];
 

@@ -15,7 +15,7 @@ const DataTable = ({ columns, fetchUrl, title='Tiêu đề' }) => {
     const [sortColumn, setSortColumn] = useState(columns[0].id)
     const [sortOrder, setSortOrder] = useState(DEFAULT_SORT_ORDER)
     const [search, setSearch] = useState("")
-    let [pagination, setPagination] = useState({})
+    const [pagination, setPagination] = useState({})
     const [currentPage, setCurrentPage] = useState(1)
     const [loading, setLoading] = useState(true)
 
