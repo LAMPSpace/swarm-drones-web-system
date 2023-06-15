@@ -6,7 +6,12 @@
 **[Swarm Drone Websystem](http://drones.svute.com)**
 
 ## **Getting Started**
-<img src="https://i.imgur.com/9zJ46ZS.pngg" alt="Infrastructure" style="height: auto; width:100%;"/>
+
+### Architecture
+<img src="https://i.imgur.com/v4Jlcvb.png" alt="Infrastructure" style="height: auto; width:100%;"/>
+
+### Infrastructure
+<img src="https://i.imgur.com/9zJ46ZS.png" alt="Infrastructure" style="height: auto; width:100%;"/>
 
 ### **Prerequisites**
 - [Docker](https://docs.docker.com/get-docker/)
