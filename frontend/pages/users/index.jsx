@@ -66,6 +66,18 @@ const UserList = () => {
             type: "delete",
             label: "Xóa",
             className: "btn btn-danger",
+            condition: (data) => {
+                return data.id !== user.id
+            },
+            renderIfFalse: (data, index) => {
+                return (
+                    <button
+                        key={index}
+                        className={"btn btn-danger"}
+                        disabled={true}
+                    >Xóa</button>
+                )
+            },
             onClick: (data) => {
                 console.log(data)
             }

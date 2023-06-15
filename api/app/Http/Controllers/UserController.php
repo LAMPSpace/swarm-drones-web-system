@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddUserRequest;
 use App\Http\Requests\DataTableRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -43,18 +44,25 @@ class UserController extends Controller
     public function show($id)
     {
         $user = $this->userService->show($id);
-        
+
         if (!$user) {
             return $this->error('Không tìm thấy người dùng', 404);
         }
-        
+
         $this->authorize('view', $user);
+
         return $this->success(new UserResource($user));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
-        //
+        $user = $this->userService->update($request->validated(), $id);
+
+        if (!$user) {
+            return $this->error('Cập nhật thất bại');
+        }
+
+        return $this->success(new UserResource($user), 'Cập nhật thành công');
     }
 
     public function destroy($id)

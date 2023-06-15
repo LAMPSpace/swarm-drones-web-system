@@ -143,6 +143,10 @@ const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [] }) =>
                                                     align={"center"}
                                                 >
                                                     {actions.map((action, index) => {
+                                                        if (action.condition && !action.condition(item)) {
+                                                            return action.renderIfFalse(item, index) || null
+                                                        }
+
                                                         return (
                                                             <button
                                                                 key={index}
