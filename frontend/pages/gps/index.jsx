@@ -18,8 +18,9 @@ export default function GPSList() {
   	});	
 
 	const last_locations = [
-		{ lat: 123.456, lng: 456.789 },
-		{ lat: 111.222, lng: 333.444 },
+	{ lat: 10.745389, lng: 106.647691 }, // Ví dụ vị trí 1
+	{ lat: 10.746826, lng: 106.644925 }, // Ví dụ vị trí 2
+	{ lat: 10.744572, lng: 106.645282 }  // Ví dụ vị trí 3
 	];
   	const [coordinates, setCoordinates] = useState(last_locations);
 
