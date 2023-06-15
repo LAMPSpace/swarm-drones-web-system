@@ -38,6 +38,7 @@ const Paginator = ({ pagination, pageChanged, totalItems }) => {
                         <li
                             className={"page-item " + (pagination?.current_page === 1 ? "disabled" : "")}
                             role="button"
+                            onClick={() => pageChanged(pagination?.current_page - 1)}
                         >
                             <span className={"page-link"}>
                                 Trước
@@ -46,6 +47,7 @@ const Paginator = ({ pagination, pageChanged, totalItems }) => {
                         <li
                             className={"page-item " + (pagination?.current_page === pagination?.last_page ? "disabled" : "")}
                             role="button"
+                            onClick={() => pageChanged(pagination?.current_page + 1)}
                         >
                             <span className={"page-link"}>
                                 Sau

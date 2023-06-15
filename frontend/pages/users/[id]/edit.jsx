@@ -26,9 +26,9 @@ const ShowUser = () => {
     const [error, setError] = useState(null);
     const [errors, setErrors] = useState({});
     const [status, setStatus] = useState(null);
-
+    const [statusUpdate, setStatusUpdate] = useState(null);
     const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState(null);
     const [is_admin, setIsAdmin] = useState(IS_NORMAL_USER);
 
     useEffect(() => {
@@ -37,7 +37,7 @@ const ShowUser = () => {
                 router.push('/403')
             }
         }
-    }, [user, router])
+    }, [user])
 
     useEffect(() => {
         if (id && user?.is_admin === IS_ADMIN) {
@@ -45,35 +45,42 @@ const ShowUser = () => {
                 id,
                 setUser: setData,
                 setError,
-                setStatus,
-            }).then(
-                () => {
-                    setName(data?.name);
-                    setIsAdmin(data?.is_admin);
-                }
-            )
+                setStatus
+            })
         }
     }, [id, user]);
 
     useEffect(() => {
+        if (data) {
+            setName(data?.name);
+            setIsAdmin(data?.is_admin);
+        }
+    }, [data]);
+
+    useEffect(() => {
         if (error) {
             router.push("/users").then(r => toast.error("Không tìm thấy người dùng", TOAST_SETTINGS))
-
         }
-    }, [error, router]);
+    }, [error]);
+
+    useEffect(() => {
+        if (statusUpdate) {
+            router.push(`/users/${data.id}`).then(r => toast.success("Cập nhật người dùng thành công", TOAST_SETTINGS))
+        }
+    }, [statusUpdate]);
 
     const submitHandler = async (e) => {
         e.preventDefault();
+
         await update({
             id,
             name,
             password,
             is_admin,
             setErrors,
-            setStatus
+            setStatus: setStatusUpdate
         })
     }
-
 
     const renderIsNotAuthenticated = () => {
         return (

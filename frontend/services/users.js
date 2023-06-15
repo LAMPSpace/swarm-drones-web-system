@@ -65,6 +65,7 @@ export const userService = () => {
 
     return {
         add,
-        find
+        find,
+        update
     }
 }

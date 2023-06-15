@@ -62,4 +62,17 @@ class UserService
 
         return $user;
     }
+
+    public function update(array $all, $id)
+    {
+        $user = $this->show($id);
+
+        if (!$user) {
+            return null;
+        }
+
+        $user->update($all);
+
+        return $user;
+    }
 }
