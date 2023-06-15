@@ -22,6 +22,15 @@ class SwarmService
         return $this->swarm::create($data);
     }
 
+    public function show($id): ?Swarm
+    {
+        if (!is_numeric($id)) {
+            return null;
+        }
+
+        return $this->swarm::find($id);
+    }
+
     protected function getSortableFields(): array
     {
         return [

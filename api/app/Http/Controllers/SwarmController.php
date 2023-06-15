@@ -37,7 +37,12 @@ class SwarmController extends Controller
 
     public function show($id)
     {
-        //
+        $swarm = $this->swarmService->show($id);
+        if ($swarm) {
+            return $this->success($swarm, 'Lấy thông tin bầy đàn thành công');
+        }
+
+        return $this->error('Lấy thông tin bầy đàn thất bại');
     }
 
     public function update(Request $request, $id)

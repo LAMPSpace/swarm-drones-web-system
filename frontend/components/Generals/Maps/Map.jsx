@@ -1,30 +1,35 @@
 import { Card } from "react-bootstrap";
 import {
-  TileLayer,
-  MapContainer,
-  useMapEvents,
-  Marker,
-  Popup,
-  FeatureGroup
+	  TileLayer,
+	  MapContainer,
+	  useMapEvents,
+	  Marker,
+	  Popup,
+	  FeatureGroup
 } from 'react-leaflet';
 import { useState, useEffect } from 'react';
 import { EditControl } from "react-leaflet-draw";
 import L from 'leaflet';
 import markerIcon from '@/assets/icons/logodep.jpg';
+import { icon } from "leaflet"
 
 const Map = ({ coordinates, setCoordinates, title }) => {
     const [position, setPosition] = useState(null);
+
+	const ICON = icon({
+		iconUrl: markerIcon.src,
+		iconSize: [32, 32],
+	})
     const _onEdited = e => {
-      let numEdited = 0;
-      e.layers.eachLayer(layer => {
-        numEdited += 1;
-      });
+		let numEdited = 0;
+		e.layers.eachLayer(layer => {
+            numEdited += 1;
+        });
     };
     const _onCreated = e => {
       	let type = e.layerType;
     	let layer = e.layer;
 		if (type === "marker") {
-		// Do marker specific actions
 			console.log("_onCreated: marker created", e);
 		} else {
 			console.log("_onCreated: something else created:", type, e);
@@ -89,23 +94,14 @@ const Map = ({ coordinates, setCoordinates, title }) => {
 	};
 
   	return (
-		<Card className="w-100 border-0 rounded-top shadow-sm overflow-hidden" style={{ height: "80vh" }}>
-		<Card.Header className="card-header align-items-center">
-			<div className="row">
-			<div className="col d-flex align-items-center">
-				<div className="d-flex align-items-center font-weight-medium py-1">{title}</div>
-			</div>
-			</div>
-		</Card.Header>
-		<Card.Body>
-			<MapContainer
+		<MapContainer
 			center={[10.852182, 106.626269]}
 			zoom={12}
 			scrollWheelZoom={true}
 			style={{ height: '100%', width: '100%' }}
-			>
+		>
 			<TileLayer
-				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+				attribution='&copy; <a href="https://hcmute.edu.vn">HCMUTE</a> contributors'
 				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 			/>
 
@@ -116,14 +112,13 @@ const Map = ({ coordinates, setCoordinates, title }) => {
 				onEdited={_onEdited}
 				onDeleted={_onDeleted}
 				draw={{
-					polyline: {
-					icon: new L.DivIcon({
-						iconSize: new L.Point(8, 8),
-						className: "leaflet-div-icon leaflet-editing-icon"
-					}),
-					},
 					rectangle: true,
-					circlemarker: true,
+					marker: {
+						icon: L.icon({
+							iconUrl: markerIcon.src,
+							iconSize: [32, 32],
+						})
+					},
 					circle: true,
 					polygon: true
 				}}
@@ -131,15 +126,12 @@ const Map = ({ coordinates, setCoordinates, title }) => {
 			</FeatureGroup>
 
 			{coordinates.map((location, index) => (
-				<Marker key={index} position={[location.lat, location.lng]}>
-				<Popup>{`Marker ${index + 1}`}</Popup>
+				<Marker key={index} position={[location.lat, location.lng]} icon={ICON}>
+					<Popup>{`Marker ${index + 1}`}</Popup>
 				</Marker>
 			))}
-
 			<LocationMarker />
-			</MapContainer>
-		</Card.Body>
-		</Card>
+		</MapContainer>
   	);
 };
 

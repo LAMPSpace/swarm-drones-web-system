@@ -22,7 +22,31 @@ export const swarmService = () => {
             })
     }
 
+    const find = async ({ setError, setSwarm, setStatus, id }) => {
+        setError(null)
+        setSwarm(null)
+        setStatus(null)
+
+        axios
+            .get(`/api/swarms/${id}`)
+            .then((response) => {
+                if (response.data.status) {
+                    setSwarm(response.data.data)
+                } else {
+                    setError(response.data.message)
+                }
+
+                setStatus(response.data.status)
+            })
+            .catch(error => {
+                if (error.response.status !== 404) throw error
+                setStatus(error.response.data.status)
+                setError(error.response.data.message)
+            })
+    }
+
     return {
-        add
+        add,
+        find
     }
 }

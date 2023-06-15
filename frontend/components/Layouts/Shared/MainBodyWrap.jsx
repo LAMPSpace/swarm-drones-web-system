@@ -1,9 +1,7 @@
-export default function MainBodyWrap({ children }) {
+export default function MainBodyWrap({ isFluid=false, children }) {
     return (
-        <div className="bg-base-1">
-            <div className="container py-3 my-3">
-                {children}
-            </div>
+        <div className={isFluid ? 'container-fluid py-2 my-2' : 'container py-3 my-3'}>
+            {children}
         </div>
     );
 }
