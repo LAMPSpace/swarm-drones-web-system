@@ -29,10 +29,9 @@ export default function GPSList() {
 			<>
 				<HeadCustom title="Trang chủ | HCMUTE Swarm Drones Control" description="Trang chủ | HCMUTE Swarm Drones Control" />
 				<MainLayout sbMenuList={sbMenuList} isFrontModule={true}>
-				<MainBodyWrap>
-					
-						<Map coordinates={	coordinates} setCoordinates={setCoordinates} title="Địa điểm GPS hiện tại" />
-				</MainBodyWrap>
+					<MainBodyWrap>
+						<Map coordinates={coordinates} setCoordinates={setCoordinates} title="Địa điểm GPS hiện tại" />
+					</MainBodyWrap>
 				</MainLayout>
 			</>
 		);
