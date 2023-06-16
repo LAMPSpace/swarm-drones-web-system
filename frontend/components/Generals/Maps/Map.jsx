@@ -17,11 +17,28 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 	console.log("mission", mission);
 
 	const iconWithNumber = (number) => {
-		return L.divIcon({
-			html: `<div class="marker-icon">${number}</div>`,
-			className: 'custom-marker-icon',
-			iconSize: [32, 32]
-		});
+			const iconStyle = `
+				position: relative;
+				width: 32px;
+				height: 32px;
+				text-align: center;
+			`;
+		
+			const numberStyle = `
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				font-weight: bold;
+			`;
+		
+			return {
+			icon: L.divIcon({
+				html: `<div class="marker-icon" style="${iconStyle}"><span style="${numberStyle}">${number}</span></div>`,
+				className: 'custom-marker-icon',
+				iconSize: [32, 32],
+			}),
+			};
 	};
 
 	const ICON = icon({
