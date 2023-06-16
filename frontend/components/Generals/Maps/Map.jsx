@@ -16,6 +16,14 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
     const [position, setPosition] = useState(null);
 	console.log("mission", mission);
 
+	const iconWithNumber = (number) => {
+		return L.divIcon({
+			html: `<div class="marker-icon">${number}</div>`,
+			className: 'custom-marker-icon',
+			iconSize: [32, 32]
+		});
+	};
+
 	const ICON = icon({
 		iconUrl: markerIcon.src,
 		iconSize: [32, 32],
@@ -132,7 +140,7 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 					<Marker
 						key={index}
 						position={[drone.location.lat, drone.location.lng]}
-						icon={ICON}
+						icon={iconWithNumber(drone.id)}
 					>
 						<Popup>
 							{drone.name}
