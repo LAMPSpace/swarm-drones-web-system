@@ -9,7 +9,7 @@ import {
 import { useState, useEffect } from 'react';
 import { EditControl } from "react-leaflet-draw";
 import L from 'leaflet';
-import markerIcon from '@/assets/icons/logodep.jpg';
+import markerIcon from '@/assets/icons/drones.png';
 import { icon } from "leaflet"
 
 const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [] }) => {

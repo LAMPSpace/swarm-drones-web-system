@@ -44,7 +44,7 @@ export default function GPSList() {
 						description="ahuhu"
 						childrenTitle="Map"
 						subHeader={<Button>Quay lại</Button>}
-						children={<Map coordinates={coordinates} setCoordinates={setCoordinates} title="Địa điểm GPS hiện tại" />}
+						children={<Map coordinates={coordinates} setCoordinates={setCoordinates} title="Địa điểm GPS hiện tại" isPlanning />}
 						styleCardBody={{ width: "100%", height: "80vh" }}
 					/>
 				</MainBodyWrap>
