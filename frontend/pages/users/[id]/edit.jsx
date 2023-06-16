@@ -15,7 +15,7 @@ import InputText from "@/components/Forms/InputText";
 import InputError from "@/components/Forms/InputError";
 import Link from "next/link";
 
-const ShowUser = () => {
+const EditUser = () => {
     const router = useRouter();
     const { id } = router.query;
     const { user } = useAuth({
@@ -197,4 +197,4 @@ const ShowUser = () => {
     )
 };
 
-export default ShowUser;
+export default EditUser;
