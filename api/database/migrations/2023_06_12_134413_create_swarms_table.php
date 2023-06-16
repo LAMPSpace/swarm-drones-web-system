@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('ip_address', 64)->nullable();
+            $table->string('port', 8)->nullable();
             $table->string('image', 512)->nullable();
             $table->enum('is_connected', ['N', 'Y'])->default('N');
             $table->json('config')->nullable();
