@@ -1,4 +1,3 @@
-import { Card } from "react-bootstrap";
 import {
 	  TileLayer,
 	  MapContainer,
@@ -13,8 +12,9 @@ import L from 'leaflet';
 import markerIcon from '@/assets/icons/logodep.jpg';
 import { icon } from "leaflet"
 
-const Map = ({ coordinates, setCoordinates, title }) => {
+const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [] }) => {
     const [position, setPosition] = useState(null);
+	console.log("mission", mission);
 
 	const ICON = icon({
 		iconUrl: markerIcon.src,
@@ -45,7 +45,7 @@ const Map = ({ coordinates, setCoordinates, title }) => {
 	const _onDeleted = e => {
 		let numDeleted = 0;
 		e.layers.eachLayer(layer => {
-		numDeleted += 1;
+			numDeleted += 1;
 		});
 		console.log(`onDeleted: removed ${numDeleted} layers`, e);
 
@@ -75,23 +75,6 @@ const Map = ({ coordinates, setCoordinates, title }) => {
 	const _onDrawStart = e => {
 		console.log("_onDrawStart", e);
 	};
-	const LocationMarker = () => {
-		const map = useMapEvents({
-		click() {
-			map.locate();
-		},
-		locationfound(e) {
-			setPosition(e.latlng);
-			map.flyTo(e.latlng, map.getZoom());
-		},
-		});
-
-		return position === null ? null : (
-		<Marker position={position}>
-			<Popup>You are here</Popup>
-		</Marker>
-		);
-	};
 
   	return (
 		<MapContainer
@@ -101,36 +84,62 @@ const Map = ({ coordinates, setCoordinates, title }) => {
 			style={{ height: '100%', width: '100%' }}
 		>
 			<TileLayer
-				attribution='&copy; <a href="https://hcmute.edu.vn">HCMUTE</a> contributors'
+				attribution='&copy; <a href="https://hcmute.edu.vn">HCMUTE</a>'
 				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 			/>
+			{
+				isPlanning && (
+					<FeatureGroup>
+						<EditControl
+							position="topleft"
+							onCreated={_onCreated}
+							onEdited={_onEdited}
+							onDeleted={_onDeleted}
+							draw={{
+								rectangle: true,
+								marker: {
+									icon: L.icon({
+										iconUrl: markerIcon.src,
+										iconSize: [32, 32],
+									})
+								},
+								circle: true,
+								polygon: true
+							}}
+						/>
+					</FeatureGroup>
+				)
+			}
 
-			<FeatureGroup>
-				<EditControl
-				position="topleft"
-				onCreated={_onCreated}
-				onEdited={_onEdited}
-				onDeleted={_onDeleted}
-				draw={{
-					rectangle: true,
-					marker: {
-						icon: L.icon({
-							iconUrl: markerIcon.src,
-							iconSize: [32, 32],
-						})
-					},
-					circle: true,
-					polygon: true
-				}}
-				/>
-			</FeatureGroup>
+			{
+				Object.keys(mission).length > 0 && (
+					mission?.waypoints.map((waypoint, index) => (
+						<Marker
+							key={index}
+							position={[waypoint.lat, waypoint.lng]}
+							icon={ICON}
+						>
+							<Popup>
+								{waypoint.id}
+							</Popup>
+						</Marker>
+					))
+				)
+			}
 
-			{coordinates.map((location, index) => (
-				<Marker key={index} position={[location.lat, location.lng]} icon={ICON}>
-					<Popup>{`Marker ${index + 1}`}</Popup>
-				</Marker>
-			))}
-			<LocationMarker />
+			{
+				drones.map((drone, index) => (
+					<Marker
+						key={index}
+						position={[drone.location.lat, drone.location.lng]}
+						icon={ICON}
+					>
+						<Popup>
+							{drone.name}
+						</Popup>
+					</Marker>
+				))
+			}
 		</MapContainer>
   	);
 };
