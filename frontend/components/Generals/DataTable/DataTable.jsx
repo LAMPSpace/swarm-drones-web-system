@@ -6,10 +6,11 @@ import {
     DEFAULT_SORT_ORDER,
     DEFAULT_PER_PAGE
 } from "@/components/Constants/common.constant";
+import Link from "next/link";
 import {FaAngleDown, FaAngleUp} from "react-icons/fa";
 import Paginator from "@/components/Generals/DataTable/Paginator";
 
-const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [] }) => {
+const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [], isButtonMission }) => {
     const [data, setData] = useState([])
     const [perPage, setPerPage] = useState(DEFAULT_PER_PAGE)
     const [sortColumn, setSortColumn] = useState(columns[0].id)
@@ -82,6 +83,18 @@ const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [] }) =>
                             />
                         </div>
                     </div>
+                    {
+                        isButtonMission ? 
+                        <div className={"col-auto"}>
+                            <div className={"input-group input-group-sm"}>
+                                {
+                                    <Link href={`/missions/add`} className={"btn btn-sm btn-outline-primary"}>
+                                        Thêm mới
+                                    </Link>
+                                }
+                            </div>
+                        </div> : <></>
+                    }
                 </div>
             </div>
             <div className={"card-body"}>

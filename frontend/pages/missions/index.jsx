@@ -86,6 +86,7 @@ const SwarmList = () => {
                             fetchUrl={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/planner-missions`}
                             columns={columns}
                             actions={actions}
+                            isButtonMission={true}
                         />
                     </MainBodyWrap>
                 </MainLayout>

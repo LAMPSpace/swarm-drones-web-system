@@ -9,7 +9,8 @@ import {
 import { useState, useEffect } from 'react';
 import { EditControl } from "react-leaflet-draw";
 import L from 'leaflet';
-import markerIcon from '@/assets/icons/drones.png';
+import droneIcon from '@/assets/icons/drones.png';
+import markerIcon from '@/assets/icons/marker.jpg';
 import { icon } from "leaflet"
 
 const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [] }) => {
@@ -17,34 +18,50 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 	console.log("mission", mission);
 
 	const iconWithNumber = (number) => {
-			const iconStyle = `
-				position: relative;
-				width: 32px;
-				height: 32px;
-				text-align: center;
-			`;
+		const iconStyle = `
+		  position: relative;
+		  width: 32px;
+		  height: 32px;
+		  text-align: center;
+		  z-index: 100;
+		`;
 		
-			const numberStyle = `
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				font-weight: bold;
-			`;
+		const numberStyle = `
+			position: absolute;
+			top: 30%;
+			left: 75%;
+			transform: translateX(-50%) translateY(-100%);
+			font-weight: bold;
+			font-size: 20px;
+			color: red;
+		`;
 		
-			return {
-				icon: L.divIcon({
-					html: `<div class="marker-icon" style="${iconStyle}"><span style="${numberStyle}">${number}</span></div>`,
-					className: 'custom-marker-icon',
-					iconSize: [32, 32],
-				}),
-			};
-	};
+		const html = `
+			<div class="marker-icon" style="${iconStyle}">
+				<span style="${numberStyle}">${number}</span>
+				<img src="${droneIcon.src}" width="50" height="50" style="pointer-events: none;" />
+			</div>
+		`;
+	  
+		return L.divIcon({
+			html: html,
+			className: 'custom-marker-icon',
+			iconSize: [32, 32],
+		});
+	  };
+	  
+	
 
-	const ICON = icon({
+	const ICONDRONE = icon({
+		iconUrl: droneIcon.src,
+		iconSize: [32, 32],
+	})
+
+	const ICONMARKER = icon({
 		iconUrl: markerIcon.src,
 		iconSize: [32, 32],
 	})
+
     const _onEdited = e => {
 		let numEdited = 0;
 		e.layers.eachLayer(layer => {
@@ -142,7 +159,7 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 						<Marker
 							key={index}
 							position={[waypoint.lat, waypoint.lng]}
-							icon={ICON}
+							icon={ICONMARKER}
 						>
 							<Popup>
 								{waypoint.id}
@@ -157,7 +174,7 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 					<Marker
 						key={index}
 						position={[drone.location.lat, drone.location.lng]}
-						// icon={iconWithNumber(drone.id)}
+						icon={iconWithNumber(drone.id)}
 					>
 						<Popup>
 							{drone.name}
