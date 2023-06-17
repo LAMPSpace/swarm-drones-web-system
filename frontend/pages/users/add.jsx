@@ -66,7 +66,7 @@ const AddUser = () => {
             toast.success('Tạo người dùng thành công', TOAST_SETTINGS)
             router.push('/users')
         }
-    }, [router, status])
+    }, [status])
 
     const renderIsAuthenticated = (user, sbMenuList) => {
         return (

@@ -21,7 +21,7 @@ const UserList = () => {
                 router.push('/403')
             }
         }
-    }, [router, user])
+    }, [user])
 
     const columns = [
         {

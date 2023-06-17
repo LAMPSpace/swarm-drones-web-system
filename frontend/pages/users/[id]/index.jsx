@@ -31,7 +31,7 @@ const ShowUser = () => {
 				router.push('/403')
 			}
 		}
-	}, [user, router])
+	}, [user])
 
 	useEffect(() => {
 		if (id && user?.is_admin === IS_ADMIN) {
@@ -49,7 +49,7 @@ const ShowUser = () => {
 			router.push("/users").then(r => toast.error("Không tìm thấy người dùng", TOAST_SETTINGS))
 
 		}
-	}, [error, router]);
+	}, [error]);
 
 	const renderIsNotAuthenticated = () => {
         return (

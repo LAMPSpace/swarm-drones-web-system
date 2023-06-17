@@ -199,3 +199,9 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+.custom-row-50 {
+    @include media-breakpoint-up(md) {
+        height: 50%;
+    }
+}

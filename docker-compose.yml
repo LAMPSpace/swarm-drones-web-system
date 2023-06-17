@@ -30,6 +30,8 @@ services:
     command: postgres -c 'max_connections=500'
     networks:
       - sdws-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: sdws_database
       POSTGRES_USER: admin
@@ -51,3 +53,5 @@ services:
 networks:
   sdws-network:
     driver: bridge
+volumes:
+    postgres_data:

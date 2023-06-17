@@ -33,11 +33,11 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 			`;
 		
 			return {
-			icon: L.divIcon({
-				html: `<div class="marker-icon" style="${iconStyle}"><span style="${numberStyle}">${number}</span></div>`,
-				className: 'custom-marker-icon',
-				iconSize: [32, 32],
-			}),
+				icon: L.divIcon({
+					html: `<div class="marker-icon" style="${iconStyle}"><span style="${numberStyle}">${number}</span></div>`,
+					className: 'custom-marker-icon',
+					iconSize: [32, 32],
+				}),
 			};
 	};
 
@@ -157,7 +157,7 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 					<Marker
 						key={index}
 						position={[drone.location.lat, drone.location.lng]}
-						icon={iconWithNumber(drone.id)}
+						// icon={iconWithNumber(drone.id)}
 					>
 						<Popup>
 							{drone.name}

@@ -112,8 +112,7 @@ const PanelControl = ({ title, setMissionSelected, ...rest }) => {
 							setMissionSelected(mission);
 							props.onHide();
 							toast.success("Cài đặt nhiệm vụ thành công!", TOAST_SETTINGS);
-						}}
-					>CHỌN</Button>
+						}}>CHỌN</Button>
 					<Button variant={"outline-secondary"} size={"sm"} onClick={props.onHide}>HỦY</Button>
 				</Modal.Footer>
 			</Modal>
@@ -147,7 +146,7 @@ const PanelControl = ({ title, setMissionSelected, ...rest }) => {
 				</Card.Header>
 				<Card.Body className={"row h-100 overflow-auto"}>
 					<div className={"col-md-7 mb-1 mb-md-0"}>
-						<div className={"row"}>
+						<div className={"row custom-row-50"}>
 							<div className={"col-md-3 pr-1 pl-md-2 pb-1"}>
 								<ButtonIcon title={"VỀ HOME"} icon={<RiHomeWifiFill style={{fontSize: "40"}} />} />
 							</div>
@@ -161,7 +160,7 @@ const PanelControl = ({ title, setMissionSelected, ...rest }) => {
 								<ButtonIcon title={"HẠ CÁNH"} icon={<GiTargetArrows style={{fontSize: "40"}} />} />
 							</div>
 						</div>
-						<div className={"row"}>
+						<div className={"row custom-row-50"}>
 							<div className={"col-md-3 pl-md-1 pl-md-2 pr-1 pt-md-1"}>
 								<ButtonIcon title={"AUTO"} icon={<MdOutlineAutoMode style={{fontSize: "40"}} />} />
 							</div>
