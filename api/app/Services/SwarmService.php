@@ -31,6 +31,17 @@ class SwarmService
         return $this->swarm::find($id);
     }
 
+    public function update(array $all, $id)
+    {
+        $swarm = $this->show($id);
+        if (!$swarm) {
+            return null;
+        }
+
+        $swarm->update($all);
+        return $swarm;
+    }
+
     protected function getSortableFields(): array
     {
         return [

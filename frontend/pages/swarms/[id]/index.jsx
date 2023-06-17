@@ -7,13 +7,20 @@ import Loading from "@/components/Layouts/Shared/Loading";
 import HeadCustom from "@/components/Layouts/Shared/HeadCustom";
 import MainLayout from "@/components/Layouts/MainLayout";
 import MainBodyWrap from "@/components/Layouts/Shared/MainBodyWrap";
-import {Card, Form} from "react-bootstrap";
+import {Button, Card, Form, Modal} from "react-bootstrap";
 import dynamic from 'next/dynamic';
 import Label from "@/components/Forms/Label";
 import InputText from "@/components/Forms/InputText";
 import CardDroneDetail from "@/components/Generals/Cards/CardDroneDetail";
 import Link from "next/link";
 import PanelControl from "@/components/Generals/PanelControl";
+import {toast} from "react-toastify";
+import {TOAST_SETTINGS} from "@/components/Constants/common.constant";
+import {
+	BiLink,
+	BiUnlink
+} from "react-icons/bi";
+import InputError from "@/components/Forms/InputError";
 
 const MapWithNoSSR = dynamic(() => import('@/components/Generals/Maps/Map'), { ssr: false });
 
@@ -26,8 +33,15 @@ const SwarmDashboard = () => {
 	const [data, setData] = useState(null);
 	const [error, setError] = useState(null);
 	const [status, setStatus] = useState(null);
+	const [showEditModal, setShowEditModal] = useState(false);
+	const [isConnected, setIsConnected] = useState(true);
+	const [isCreatingMission, setIsCreatingMission] = useState(false);
+	const [ip_address, setIpAddress] = useState("");
+	const [name, setName] = useState("");
+	const [port, setPort] = useState("");
+	const [editFormError, setEditFormError] = useState({});
 
-	const { find } = swarmService();
+	const { find, update } = swarmService();
 
 	useEffect(() => {
 		if (id && user) {
@@ -39,6 +53,32 @@ const SwarmDashboard = () => {
 			})
 		}
 	}, [id, user]);
+
+	useEffect(() => {
+		if (data) {
+			setName(data?.name);
+			setIpAddress(data?.ip_address);
+			setPort(data?.port);
+		}
+	}, [data]);
+
+	const handleEdit = async () => {
+		update({
+			id,
+			name,
+			ip_address,
+			port,
+			setSwarm: setData,
+			setErrors: setEditFormError,
+			setStatus,
+		})
+
+		setShowEditModal(false);
+
+		if (status) {
+			toast.success('Cập nhật thành công', TOAST_SETTINGS);
+		}
+	}
 
 	const renderIsNotAuthenticated = () => {
 		return (
@@ -96,19 +136,63 @@ const SwarmDashboard = () => {
 
 	const [missionSelected, setMissionSelected] = useState({});
 
-	const renderDetailSwarm = () => {
+	const renderDetailSwarm = (isEdit = false) => {
 		return (
 			<Form>
+				{
+					isEdit && (
+						<Form.Group className={"mb-2"}>
+							<Label htmlFor={"username"}>Tên đội</Label>
+							<InputText
+								id={"name"}
+								name={"name"}
+								type={"text"}
+								value={name}
+								className={`form-control`}
+								disabled={!isEdit}
+								onChange={(e) => setName(e.target.value)}
+							/>
+							{
+								isEdit && (
+									<InputError message={editFormError?.name} />
+								)
+							}
+						</Form.Group>
+					)
+				}
 				<Form.Group className={"mb-2"}>
 					<Label htmlFor={"username"}>ĐỊA CHỈ IP</Label>
 					<InputText
 						id={"ip_address"}
 						name={"ip_address"}
 						type={"text"}
-						value={data?.ip_address}
+						value={ip_address}
 						className={`form-control`}
-						disabled={true}
+						disabled={!isEdit}
+						onChange={(e) => setIpAddress(e.target.value)}
 					/>
+					{
+						isEdit && (
+							<InputError message={editFormError?.ip_address} />
+						)
+					}
+				</Form.Group>
+				<Form.Group className={"mb-2"}>
+					<Label htmlFor={"username"}>CỔNG KẾT NỐI</Label>
+					<InputText
+						id={"port"}
+						name={"port"}
+						type={"text"}
+						value={port}
+						className={`form-control`}
+						disabled={!isEdit}
+						onChange={(e) => setPort(e.target.value)}
+					/>
+					{
+						isEdit && (
+							<InputError message={editFormError?.port} />
+						)
+					}
 				</Form.Group>
 			</Form>
 		)
@@ -125,6 +209,30 @@ const SwarmDashboard = () => {
 				))}
 			</>
 		)
+	}
+
+	const renderEditModal = (props) => {
+		return (
+			<Modal
+				{...props}
+				size="lg"
+				aria-labelledby="contained-modal-title-vcenter"
+				centered
+			>
+				<Modal.Header>
+					<Modal.Title id="contained-modal-title-vcenter">
+						Chỉnh sửa thông tin đội
+					</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					{renderDetailSwarm(true)}
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="primary" onClick={() => handleEdit()}>Lưu</Button>
+					<Button onClick={props.onHide}>Đóng</Button>
+				</Modal.Footer>
+			</Modal>
+		);
 	}
 
 	const renderIsAuthenticated = (user, sbMenuList) => {
@@ -146,9 +254,34 @@ const SwarmDashboard = () => {
 												GIÁM SÁT | <strong>{data?.name}</strong>
 											</div>
 											<div className={"col-auto"}>
-												<Link href={`/swarms/${id}/edit`} className={"btn btn-sm btn-outline-primary"}>
-													Chỉnh sửa
-												</Link>
+												<Button variant={isConnected ? "outline-success" : "outline-danger"}
+												        size={"sm"}
+														className={"mr-1"}
+												>
+													{
+														isConnected ? (
+															<>
+																<BiLink />
+																<span className={"ml-1"}>Đã kết nối</span>
+															</>
+														) : (
+															<>
+																<BiUnlink />
+																<span className={"ml-1"}>Chưa kết nối</span>
+															</>
+														)
+													}
+												</Button>
+												<Button variant={"outline-primary"}
+												        size={"sm"}
+												        onClick={() => setShowEditModal(true)}>Chỉnh sửa</Button>
+												{
+													showEditModal &&
+													renderEditModal({
+														show: showEditModal,
+														onHide: () => setShowEditModal(false)
+													})
+												}
 											</div>
 										</div>
 									</Card.Header>

@@ -19,7 +19,8 @@ class Swarm extends Model
         'is_connected',
         'config',
         'owner_id',
-        'ip_address'
+        'ip_address',
+        'port',
     ];
 
     protected $casts = [

@@ -19,7 +19,7 @@ class SwarmResource extends JsonResource
             'name' => $this->name,
             'owner_id' => $this->owner_id,
             'owner_name' => $this->owner->name,
-            'is_connected' => $this->is_connected,
+            'port' => $this->port,
             'ip_address' => $this->ip_address,
             'config' => $this->config,
         ];

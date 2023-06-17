@@ -37,12 +37,9 @@ const SwarmList = () => {
             label: "Địa chỉ IP",
         },
         {
-            id: "is_connected",
-            label: "Trạng thái",
-            align: "center",
-            render: (data) => {
-                return data.is_connected === IS_CONNECTED? "Đã kết nối" : "Chưa kết nối"
-            }
+            id: "port",
+            label: "Cổng kết nối",
+            align: "center"
         }
     ]
 

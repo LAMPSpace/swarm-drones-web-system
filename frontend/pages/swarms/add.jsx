@@ -24,6 +24,7 @@ const AddSwarm = () => {
 
     const [name, setName] = useState("")
     const [ip_address, setIpAddress] = useState("")
+    const [port, setPort] = useState("")
     const [errors, setErrors] = useState({});
     const [status, setStatus] = useState(null)
 
@@ -33,6 +34,7 @@ const AddSwarm = () => {
         await add({
             name,
             ip_address,
+            port,
             setErrors,
             setStatus,
         })
@@ -91,9 +93,22 @@ const AddSwarm = () => {
                                         />
                                         <InputError message={errors.ip_address} />
                                     </Form.Group>
+                                    <Form.Group className={"mb-2"}>
+                                        <Label htmlFor={"port"}>CỔNG KẾT NỐI</Label>
+                                        <InputText
+                                            id={"port"}
+                                            name={"port"}
+                                            type={"text"}
+                                            placeholder={"Nhập cổng kết nối"}
+                                            value={port}
+                                            className={`form-control ${errors.port ? "is-invalid" : ""}`}
+                                            onChange={(e) => setPort(e.target.value)}
+                                        />
+                                        <InputError message={errors.port} />
+                                    </Form.Group>
                                     <Form.Group className={"mt-2"}>
                                         <Button className={"btn btn-primary"} type={"submit"}>
-                                            Thêm đội
+                                            Thêm bầy đàn
                                         </Button>
                                     </Form.Group>
                                 </Form>
