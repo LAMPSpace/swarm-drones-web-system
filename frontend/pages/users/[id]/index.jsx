@@ -42,7 +42,7 @@ const ShowUser = () => {
 				setStatus,
 			});
 		}
-	}, [id, user]);
+	}, [find, id, user]);
 
 	useEffect(() => {
 		if (error) {

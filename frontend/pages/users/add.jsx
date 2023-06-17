@@ -28,7 +28,7 @@ const AddUser = () => {
                 router.push('/403')
             }
         }
-    }, [user])
+    }, [router, user])
 
     const [name, setName] = useState("")
     const [username, setUsername] = useState("")
@@ -66,7 +66,7 @@ const AddUser = () => {
             toast.success('Tạo người dùng thành công', TOAST_SETTINGS)
             router.push('/users')
         }
-    }, [status])
+    }, [router, status])
 
     const renderIsAuthenticated = (user, sbMenuList) => {
         return (

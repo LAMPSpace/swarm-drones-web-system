@@ -63,7 +63,7 @@ const DataTable = ({ columns, fetchUrl, title= 'Tiêu đề', actions = [] }) =>
         }
 
         fetchData()
-    }, [sortColumn, sortOrder, perPage, currentPage])
+    }, [sortColumn, sortOrder, perPage, currentPage, search, fetchUrl])
 
     return (
         <div className={"card border-0 shadow-sm"}>

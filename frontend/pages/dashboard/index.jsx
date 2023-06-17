@@ -18,7 +18,7 @@ const Dashboard = () => {
         if (user?.is_admin !== IS_ADMIN) {
             router.push('/403')
         }
-    }, [user])
+    }, [router, user])
 
     const renderIsAuthenticated = (user, sbMenuList) => {
         return (

@@ -38,7 +38,7 @@ const SwarmDashboard = () => {
 				setStatus,
 			})
 		}
-	}, [id, user]);
+	}, [find, id, user]);
 
 	const renderIsNotAuthenticated = () => {
 		return (

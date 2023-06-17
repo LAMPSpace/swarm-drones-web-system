@@ -37,7 +37,7 @@ const EditUser = () => {
                 router.push('/403')
             }
         }
-    }, [user])
+    }, [router, user])
 
     useEffect(() => {
         if (id && user?.is_admin === IS_ADMIN) {
@@ -48,7 +48,7 @@ const EditUser = () => {
                 setStatus
             })
         }
-    }, [id, user]);
+    }, [find, id, user]);
 
     useEffect(() => {
         if (data) {
@@ -61,13 +61,13 @@ const EditUser = () => {
         if (error) {
             router.push("/users").then(r => toast.error("Không tìm thấy người dùng", TOAST_SETTINGS))
         }
-    }, [error]);
+    }, [error, router]);
 
     useEffect(() => {
         if (statusUpdate) {
-            router.push(`/users/${data.id}`).then(r => toast.success("Cập nhật người dùng thành công", TOAST_SETTINGS))
+            router.push(`/users/${data?.id}`).then(r => toast.success("Cập nhật người dùng thành công", TOAST_SETTINGS))
         }
-    }, [statusUpdate]);
+    }, [router, statusUpdate, data]);
 
     const submitHandler = async (e) => {
         e.preventDefault();
