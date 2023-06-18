@@ -18,104 +18,74 @@ import PanelControl from "@/components/Generals/PanelControl";
 const MapWithNoSSR = dynamic(() => import('@/components/Generals/Maps/Map'), { ssr: false });
 const AddMission = () => {
     const router = useRouter();
-	const { id } = router.query;
 	const { user } = useAuth({
 		middleware: "auth"
 	})
 	const [data, setData] = useState(null);
 	const [error, setError] = useState(null);
 	const [status, setStatus] = useState(null);
-
-	const { find } = swarmService();
+	const [swarms, setSwarms] = useState([]);
+	const { get } = swarmService();
 
 	useEffect(() => {
-		if (id && user) {
-			find({
-				id,
-				setSwarm: setData,
+		if (user) {
+			get({
 				setError,
-				setStatus,
-			})
+				setSwarm: setSwarms,
+				setStatus
+			});
 		}
-	}, [id, user]);
-
-    const [swarm, setSwarm] = useState([
-        {
-            id: 1,
-            name: "swarm-1"
-        },
-        {
-            id: 2,
-            name: "swarm-2"
-        },
-        {
-            id: 3,
-            name: "swarm-3"
-        },
-        {
-            id: 4,
-            name: "swarm-4"
-        },
-        {
-            id: 5,
-            name: "swarm-5"
-        }
-    ]);
+	}, [user]);
 
     const [missionSelected, setMissionSelected] = useState({});
     const [swarmSelected, setSwarmSelected] = useState([]);
 
-	const renderDetailSwarm = (swa) => {
+	const renderDetailSwarm = () => {
 		return (
 			<Form>
-                <Form.Group className={"mb-2"}>
-					<Label htmlFor={"swarm"}>Swarm</Label>
-					<DropdownButton 
-                        id="swarm_id" 
-                        title = {
-                                    swarmSelected && swarmSelected.name
-                                    ? swarmSelected.name
-                                    : swarmSelected && swarmSelected.length === 0
-                                    ? "--Chọn swarm--"
-                                    : "Swarm"
-                                }
-                    >
-                        {
-                            swa?.map((items, index) => (
-                                <Dropdown.Item 
-                                    key={items.id}
-                                    href=""
-                                    onClick={() => setSwarmSelected(items)}
-                                >
-                                    {items.name}
-                                </Dropdown.Item>
-                            ))
-                        }
-                    </DropdownButton>
+				<Form.Group className={"mb-3"}>
+					<Form.Label htmlFor="swarm">SWARM: </Form.Label>
+					<Form.Select
+						id="swarm"
+						name="swarm"
+						className={"form-control"}
+						value={swarmSelected ? swarmSelected.id : ''}
+					>
+						{Array.isArray(swarms) &&
+							swarms.map((swm) => (
+								<option
+									key={swm.id}
+									value={swm.id}
+									onClick={() => setSwarmSelected(swm)}
+								>
+									{swm.name}
+								</option>
+							))}
+					</Form.Select>
 				</Form.Group>
 			</Form>
 		)
 	}
 
-	// const renderDetailDrone = (drones) => {
-	// 	return (
-	// 		<>
-	// 			{drones?.map((drone, index) => (
-	// 				<CardDroneDetail
-	// 					key={index}
-	// 					drone={drone}
-	// 				/>
-	// 			))}
-	// 		</>
-	// 	)
-	// }
+	const renderDetailMission = (mission) => {
+		return (
+			<>
+				{mission?.map((ms, index) => (
+					<CardDroneDetail
+						key={index}
+						drone={ms}
+					/>
+				))}
+			</>
+		)
+	}
 
     const renderIsAuthenticated = (user, sbMenuList) => {
 		return (
 			<>
 				<HeadCustom
-					title={`${data?.name} | HCMUTE Swarm Drones Control`}
-					description={`${data?.name} | HCMUTE Swarm Drones Control`} />
+					title={`Thêm Mission | HCMUTE Swarm Drones Control`}
+					description={`Thêm Mission | HCMUTE Swarm Drones Control`} />
 				<MainLayout sbMenuList={sbMenuList} isFrontModule={false}>
 					<MainBodyWrap isFluid={true}>
 						<div className={"row"}>
@@ -126,7 +96,7 @@ const AddMission = () => {
 									<Card.Header className={"align-items-center"}>
 										<div className={"row"}>
 											<div className={"col"}>
-												GIÁM SÁT | <strong>{data?.name}</strong>
+												Thêm Mission
 											</div>
 											<div className={"col-auto"}>
 												<Link href={`/`} className={"btn btn-sm btn-outline-primary"}>
@@ -136,7 +106,7 @@ const AddMission = () => {
 										</div>
 									</Card.Header>
 									<Card.Body className={"w-auto overflow-auto"}>
-										{renderDetailSwarm(swarm)}
+										{renderDetailSwarm()}
 									</Card.Body>
 								</Card>
 							</div>

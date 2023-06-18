@@ -29,7 +29,7 @@ class DataTableRequest extends FormRequest
             'per_page' => 'nullable|integer',
             'search' => 'nullable|string',
             'page' => 'nullable|integer',
-            'is_paginate' => 'nullable|boolean',
+            'is_paginate' => 'nullable|int|in:0,1',
         ];
     }
 }
