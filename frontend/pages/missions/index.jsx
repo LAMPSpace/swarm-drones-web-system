@@ -8,6 +8,7 @@ import MainBodyWrap from "@/components/Layouts/Shared/MainBodyWrap";
 import Loading from "@/components/Layouts/Shared/Loading";
 import DataTable from "@/components/Generals/DataTable/DataTable";
 import {USER_MENU_LIST} from "@/components/Constants/menu-list.constant";
+import Link from "next/link";
 
 const SwarmList = () => {
     const router = useRouter()
@@ -73,6 +74,17 @@ const SwarmList = () => {
         }
     ]
 
+    const renderButtonAdd = () => {
+        return (
+            <Link
+                className={"btn btn-primary"}
+                href={"/missions/add"}
+            >
+                THÊM NHIỆM VỤ
+            </Link>
+        )
+    }
+
     const renderIsAuthenticated = (user, sbMenuList) => {
         return (
             <>
@@ -86,7 +98,7 @@ const SwarmList = () => {
                             fetchUrl={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/planner-missions`}
                             columns={columns}
                             actions={actions}
-                            isButtonMission={true}
+                            subHeader={renderButtonAdd()}
                         />
                     </MainBodyWrap>
                 </MainLayout>

@@ -21,6 +21,9 @@ import {
 	BiUnlink
 } from "react-icons/bi";
 import InputError from "@/components/Forms/InputError";
+import {
+	initRos
+} from "@/hooks/ros";
 
 const MapWithNoSSR = dynamic(() => import('@/components/Generals/Maps/Map'), { ssr: false });
 
@@ -40,6 +43,7 @@ const SwarmDashboard = () => {
 	const [name, setName] = useState("");
 	const [port, setPort] = useState("");
 	const [editFormError, setEditFormError] = useState({});
+	const [ros, setRos] = useState(null);
 
 	const { find, update } = swarmService();
 
@@ -77,6 +81,24 @@ const SwarmDashboard = () => {
 
 		if (status) {
 			toast.success('Cập nhật thành công', TOAST_SETTINGS);
+		}
+	}
+
+	const handleConnect = async () => {
+		if (isConnected) {
+			if (!ros || !ros.isConnected)
+			{
+				setRos(await initRos(ip_address, port));
+			} else {
+				console.log("ROS is connected");
+			}
+		} else {
+			if (ros && ros.isConnected) {
+				ros.close();
+				setRos(null);
+			} else {
+				console.log("ROS is not connected");
+			}
 		}
 	}
 
@@ -257,6 +279,7 @@ const SwarmDashboard = () => {
 												<Button variant={isConnected ? "outline-success" : "outline-danger"}
 												        size={"sm"}
 														className={"mr-1"}
+														onClick={() => handleConnect()}
 												>
 													{
 														isConnected ? (

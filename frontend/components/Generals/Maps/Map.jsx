@@ -13,10 +13,10 @@ import droneIcon from '@/assets/icons/drones.png';
 import markerIcon from '@/assets/icons/marker.jpg';
 import { icon } from "leaflet"
 
-const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [], onCreate, onEdit, onDelete }) => {
-    const [position, setPosition] = useState(null);
-	const [markerPosition, setMarkerPosition] = useState(null);
-	console.log("mission", mission);
+const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [], waypoints, setWaypoints }) => {
+    // const [oldWaypoints, setOldWaypoints] = useState([]);
+	const [editedWaypoints, setEditedWaypoints] = useState([]);
+	const [deletedWaypoints, setDeletedWaypoints] = useState([]);
 
 	const iconWithNumber = (number) => {
 		const iconStyle = `
@@ -51,8 +51,6 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 		});
 	  };
 
-
-
 	const ICONDRONE = icon({
 		iconUrl: droneIcon.src,
 		iconSize: [32, 32],
@@ -63,53 +61,108 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 		iconSize: [32, 32],
 	})
 
+
+	const _onEditStart = e => {
+		// const oldLayers = e.sourceTarget._layers;
+		// const newLayers = Object.values(oldLayers).slice(2);
+		// const newWaypoints = newLayers.map(layer => {
+		// 	const { lat, lng } = layer._latlng;
+		// 	const id = layer._leaflet_id;
+		// 	return { id, lat, lng };
+		// });
+		// setOldWaypoints(newWaypoints);
+	};
+
     const _onEdited = e => {
-		let numEdited = 0;
-		e.layers.eachLayer(layer => {
-			numEdited += 1;
+		const {
+			layers: { _layers }
+		} = e;
+
+		const newLayers = []
+
+		Object.values(_layers).map(({ _leaflet_id, _latlng }) => {
+			const { lat, lng } = _latlng;
+			const id = _leaflet_id;
+
+			newLayers.push({ id, lat, lng });
 		});
-		console.log(`_onEdited: edited ${numEdited} layers`, e);
+
+		setEditedWaypoints(newLayers);
     };
+
+	useEffect(() => {
+		if (isPlanning) {
+			Object.values(editedWaypoints).map((editedWaypoint, index) => {
+				const ix =  waypoints.findIndex(oldWaypoint => oldWaypoint.id === editedWaypoint.id);
+				if (ix !== -1) {
+					setWaypoints(prevWaypoints => {
+						const newWaypoints = [...prevWaypoints];
+						newWaypoints[ix] = editedWaypoint;
+						return newWaypoints;
+					})
+				}
+			})
+		}
+	}, [editedWaypoints])
+
+	useEffect(() => {
+		if (isPlanning) {
+			Object.values(deletedWaypoints).map((deletedWaypoint, index) => {
+				const ix =  waypoints.findIndex(waypoint => waypoint.id == deletedWaypoint.id);
+				if (ix !== -1) {
+					setWaypoints(
+						prevWaypoints => prevWaypoints
+							.filter(waypoint => !Object.values(deletedWaypoints)
+								.some(deletedWaypoint => deletedWaypoint.id === waypoint.id))
+					);
+
+				}
+			})
+		}
+	}, [deletedWaypoints])
+
     const _onCreated = e => {
 		let type = e.layerType;
 		let layer = e.layer;
 		if (type === "marker") {
 			const { lat, lng } = layer.getLatLng();
-			if (markerPosition	 !== null) {
-				setMarkerPosition(...markerPosition, { lat, lng });
-			} else {
-				setMarkerPosition({ lat, lng });
-			}
-			console.log("_onCreated: marker created", lat, lng);
+			const id = layer._leaflet_id;
+			setWaypoints(prevWaypoints => [...prevWaypoints, { id, lat, lng }]);
 		} else {
 			console.log("_onCreated: something else created:", type, e);
 		}
   	};
 
-
-
 	const _onDeleted = e => {
-		let numDeleted = 0;
-		e.layers.eachLayer(layer => {
-			numDeleted += 1;
+		const {
+			layers: { _layers }
+		} = e;
+
+		const deletedLayers = []
+
+		Object.values(_layers).map(({ _leaflet_id, _latlng }) => {
+			const { lat, lng } = _latlng;
+			const id = _leaflet_id;
+
+			deletedLayers.push({ id, lat, lng });
 		});
-		console.log(`onDeleted: removed ${numDeleted} layers`, e);
+		console.log("deletedLayers", deletedLayers);
+
+		setDeletedWaypoints(deletedLayers);
 	};
 
 	const _onMounted = drawControl => {
 		console.log("_onMounted", drawControl);
 	};
+	console.log("waypoints", waypoints);
 
-	const _onEditStart = e => {
-		console.log("_onEditStart", e);
-	};
 
 	const _onEditStop = e => {
-		console.log(e);
+
 	};
 
 	const _onDeleteStart = e => {
-		console.log("_onDeleteStart", e);
+		//
 	};
 
 	const _onDeleteStop = e => {
@@ -119,7 +172,7 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 	const _onDrawStart = e => {
 		console.log("_onDrawStart", e);
 	};
-console.log(markerPosition);
+
   	return (
 		<MapContainer
 			center={[10.852182, 106.626269]}
@@ -142,10 +195,9 @@ console.log(markerPosition);
 							onMounted={_onMounted}
 							onEditStart={_onEditStart}
 							onEditStop={_onEditStop}
-							onDeleteStart={_onDeleteStart}
 							onDeleteStop={_onDeleteStop}
-							onDrawStart={_onDrawStart}
 							draw={{
+								polyline: false,
 								rectangle: true,
 								marker: {
 									icon: L.icon({
@@ -154,6 +206,7 @@ console.log(markerPosition);
 									})
 								},
 								circle: true,
+								circlemarker: false,
 								polygon: true
 							}}
 						/>
