@@ -42,10 +42,14 @@ trait DataTableTrait
         $sortOrder = $data['sort_order'] ?? 'asc';
         $perPage = $data['per_page'] ?? 10;
         $search = $data['search'] ?? null;
+        $isPaginate = $data['is_paginate'] ?? true;
 
         $query = $this->sortQuery($query, $sort, $sortOrder);
         $query = $this->searchQuery($query, $search);
 
+        if (!$isPaginate) {
+            return $query->get();
+        }
         return $this->paginateQuery($query, $perPage);
     }
 }
