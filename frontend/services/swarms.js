@@ -45,8 +45,33 @@ export const swarmService = () => {
             })
     }
 
+    const update = async ({ setErrors,setSwarm, setStatus, ...props }) => {
+        setErrors([])
+        setStatus(null)
+
+        axios
+            .put(`/api/swarms/${props.id}`, props)
+            .then(response => {
+                setSwarm(response.data.data)
+                setStatus(response.data.status)
+            })
+            .catch(error => {
+                switch (error.response.status) {
+                    case 403:
+                        window.location.href = '/403'
+                        break
+                    case 422:
+                        setErrors(error.response.data.errors)
+                        break
+                    default:
+                        throw error
+                }
+            })
+    }
+
     return {
         add,
-        find
+        find,
+        update
     }
 }

@@ -31,6 +31,17 @@ class SwarmService
         return $this->swarm::find($id);
     }
 
+    public function update(array $all, $id)
+    {
+        $swarm = $this->show($id);
+        if (!$swarm) {
+            return null;
+        }
+
+        $swarm->update($all);
+        return $swarm;
+    }
+
     protected function getSortableFields(): array
     {
         return [
@@ -53,13 +64,16 @@ class SwarmService
 
         if ($user->isAdmin() && isset($data['show_all'])) {
             return $this->getPaginatedData(
-                $this->swarm::query(),
+                $this->swarm::with('owner')->getQuery(),
                 $data
             );
         }
 
         return $this->getPaginatedData(
-            $user->swarms()->with('owner')->getQuery(),
+            $user->swarms()
+                ->with('owner')
+                ->where('owner_id', $user->id)
+                ->getQuery(),
             $data
         );
     }

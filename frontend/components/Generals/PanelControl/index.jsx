@@ -85,6 +85,7 @@ const PanelControl = ({ title, setMissionSelected, ...rest }) => {
 								id={"mission"}
 								name={"mission"}
 								value={mission.id}
+								className={"form-control"}
 								onChange={(e) => setMission(
 									missions.find(mission => mission.id === parseInt(e.target.value))
 								)}

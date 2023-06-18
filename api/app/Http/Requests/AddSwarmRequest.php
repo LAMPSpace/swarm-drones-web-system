@@ -26,6 +26,7 @@ class AddSwarmRequest extends FormRequest
         return [
             'name' => 'required|string|max:128',
             'ip_address' => 'nullable|string|max:64|ip',
+            'port' => 'nullable|integer|min:1|max:65535',
         ];
     }
 
@@ -43,6 +44,9 @@ class AddSwarmRequest extends FormRequest
             'ip_address.string' => 'Địa chỉ IP không hợp lệ',
             'ip_address.max' => 'Địa chỉ IP phải nhỏ hơn 64 ký tự',
             'ip_address.ip' => 'Địa chỉ IP không hợp lệ',
+            'port.integer' => 'Cổng kết nối phải là số nguyên',
+            'port.min' => 'Cổng kết nối phải lớn hơn 0',
+            'port.max' => 'Cổng kết nối phải nhỏ hơn 65536',
         ];
     }
 }

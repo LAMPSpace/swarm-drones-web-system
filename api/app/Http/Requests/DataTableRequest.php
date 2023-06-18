@@ -28,7 +28,8 @@ class DataTableRequest extends FormRequest
             'sort_order' => 'nullable|in:asc,desc',
             'per_page' => 'nullable|integer',
             'search' => 'nullable|string',
-            'page' => 'nullable|integer'
+            'page' => 'nullable|integer',
+            'is_paginate' => 'nullable|boolean',
         ];
     }
 }
