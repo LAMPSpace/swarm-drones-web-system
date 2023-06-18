@@ -317,7 +317,7 @@ const SwarmDashboard = () => {
 							<div className={"col-md-8 mt-md-0 mt-4"}>
 								<div className={"row m-0"} style={{height: '95vh'}}>
 									<div className={"border rounded border-width-2 border-dashed w-100 shadow-sm"} style={{height: "70%"}} >
-										<MapWithNoSSR drones={drones} mission={missionSelected} isPlanning={true} />
+										<MapWithNoSSR drones={drones} mission={missionSelected} isPlanning={false} />
 									</div>
 									<div className={"w-100"} style={{height: "30%"}} >
 										<PanelControl title={"BẢNG ĐIỀU KHIỂN"} setMissionSelected={setMissionSelected} />
