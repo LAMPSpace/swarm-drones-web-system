@@ -45,6 +45,30 @@ export const swarmService = () => {
             })
     }
 
+    const get = async ({ setError, setSwarm, setStatus, isPaginate = false })  => {
+        setError(null)
+        setSwarm(null)
+        setStatus(null)
+
+        axios
+            .get(`/api/swarms?is_paginate=${isPaginate ? 1 : 0}`)
+            .then((response) => {
+                if (response.data.status) {
+                    setSwarm(response.data.data)
+                } else {
+                    setError(response.data.message)
+                }
+
+                setStatus(response.data.status)
+            })
+            .catch(error => {
+                if (error.response.status !== 404) throw error
+                setStatus(error.response.data.status)
+                setError(error.response.data.message)
+            })
+
+    }
+
     const update = async ({ setErrors,setSwarm, setStatus, ...props }) => {
         setErrors([])
         setStatus(null)
@@ -72,6 +96,7 @@ export const swarmService = () => {
     return {
         add,
         find,
+        get,
         update
     }
 }

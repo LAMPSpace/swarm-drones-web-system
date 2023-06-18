@@ -9,63 +9,84 @@ import {
 import { useState, useEffect } from 'react';
 import { EditControl } from "react-leaflet-draw";
 import L from 'leaflet';
-import markerIcon from '@/assets/icons/drones.png';
+import droneIcon from '@/assets/icons/drones.png';
+import markerIcon from '@/assets/icons/marker.jpg';
 import { icon } from "leaflet"
 
-const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [] }) => {
+const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [], onCreate, onEdit, onDelete }) => {
     const [position, setPosition] = useState(null);
+	const [markerPosition, setMarkerPosition] = useState(null);
 	console.log("mission", mission);
 
 	const iconWithNumber = (number) => {
-			const iconStyle = `
-				position: relative;
-				width: 32px;
-				height: 32px;
-				text-align: center;
-			`;
-		
-			const numberStyle = `
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				font-weight: bold;
-			`;
-		
-			return {
-				icon: L.divIcon({
-					html: `<div class="marker-icon" style="${iconStyle}"><span style="${numberStyle}">${number}</span></div>`,
-					className: 'custom-marker-icon',
-					iconSize: [32, 32],
-				}),
-			};
-	};
+		const iconStyle = `
+		  position: relative;
+		  width: 32px;
+		  height: 32px;
+		  text-align: center;
+		  z-index: 100;
+		`;
 
-	const ICON = icon({
+		const numberStyle = `
+			position: absolute;
+			top: 30%;
+			left: 75%;
+			transform: translateX(-50%) translateY(-100%);
+			font-weight: bold;
+			font-size: 20px;
+			color: red;
+		`;
+
+		const html = `
+			<div class="marker-icon" style="${iconStyle}">
+				<span style="${numberStyle}">${number}</span>
+				<img src="${droneIcon.src}" width="50" height="50" style="pointer-events: none;" />
+			</div>
+		`;
+
+		return L.divIcon({
+			html: html,
+			className: 'custom-marker-icon',
+			iconSize: [32, 32],
+		});
+	  };
+
+
+
+	const ICONDRONE = icon({
+		iconUrl: droneIcon.src,
+		iconSize: [32, 32],
+	})
+
+	const ICONMARKER = icon({
 		iconUrl: markerIcon.src,
 		iconSize: [32, 32],
 	})
+
     const _onEdited = e => {
 		let numEdited = 0;
 		e.layers.eachLayer(layer => {
-            numEdited += 1;
-        });
+			numEdited += 1;
+		});
+		console.log(`_onEdited: edited ${numEdited} layers`, e);
     };
     const _onCreated = e => {
-      	let type = e.layerType;
-    	let layer = e.layer;
+		let type = e.layerType;
+		let layer = e.layer;
 		if (type === "marker") {
-			console.log("_onCreated: marker created", e);
+			const { lat, lng } = layer.getLatLng();
+			if (markerPosition	 !== null) {
+				setMarkerPosition(...markerPosition, { lat, lng });
+			} else {
+				setMarkerPosition({ lat, lng });
+			}
+			console.log("_onCreated: marker created", lat, lng);
 		} else {
 			console.log("_onCreated: something else created:", type, e);
 		}
-
-		// console.log("Geojson", layer.toGeoJSON());
-		// console.log("coords", layer.getLatLngs());
-		// Do whatever else you need to. (save to db; etc)
-
-		// this._onChange();
   	};
+
+
 
 	const _onDeleted = e => {
 		let numDeleted = 0;
@@ -73,8 +94,6 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 			numDeleted += 1;
 		});
 		console.log(`onDeleted: removed ${numDeleted} layers`, e);
-
-		// this._onChange();
 	};
 
 	const _onMounted = drawControl => {
@@ -86,7 +105,7 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 	};
 
 	const _onEditStop = e => {
-		console.log("_onEditStop", e);
+		console.log(e);
 	};
 
 	const _onDeleteStart = e => {
@@ -100,7 +119,7 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 	const _onDrawStart = e => {
 		console.log("_onDrawStart", e);
 	};
-
+console.log(markerPosition);
   	return (
 		<MapContainer
 			center={[10.852182, 106.626269]}
@@ -120,6 +139,12 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 							onCreated={_onCreated}
 							onEdited={_onEdited}
 							onDeleted={_onDeleted}
+							onMounted={_onMounted}
+							onEditStart={_onEditStart}
+							onEditStop={_onEditStop}
+							onDeleteStart={_onDeleteStart}
+							onDeleteStop={_onDeleteStop}
+							onDrawStart={_onDrawStart}
 							draw={{
 								rectangle: true,
 								marker: {
@@ -142,7 +167,7 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 						<Marker
 							key={index}
 							position={[waypoint.lat, waypoint.lng]}
-							icon={ICON}
+							icon={ICONMARKER}
 						>
 							<Popup>
 								{waypoint.id}
@@ -157,7 +182,7 @@ const Map = ({ drones = [], mission = {}, isPlanning = false, centerLocation = [
 					<Marker
 						key={index}
 						position={[drone.location.lat, drone.location.lng]}
-						// icon={iconWithNumber(drone.id)}
+						icon={iconWithNumber(drone.id)}
 					>
 						<Popup>
 							{drone.name}
