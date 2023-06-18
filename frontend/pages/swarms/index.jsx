@@ -8,6 +8,13 @@ import MainBodyWrap from "@/components/Layouts/Shared/MainBodyWrap";
 import Loading from "@/components/Layouts/Shared/Loading";
 import DataTable from "@/components/Generals/DataTable/DataTable";
 import {USER_MENU_LIST} from "@/components/Constants/menu-list.constant";
+import {
+    RiRemoteControlFill
+} from "react-icons/ri";
+import {
+    BsFillTrashFill
+} from "react-icons/bs";
+import Link from "next/link";
 
 const SwarmList = () => {
     const router = useRouter()
@@ -46,29 +53,34 @@ const SwarmList = () => {
     const actions = [
         {
             type: "view",
-            label: "BẢNG ĐIỀU KHIỂN",
+            label: "Điều khiển",
+            icon: <RiRemoteControlFill />,
             className: "btn btn-primary mr-2 w-sm-100",
             onClick: (data) => {
                 router.push(`/swarms/${data.id}`)
             }
         },
         {
-            type: "edit",
-            label: "Sửa",
-            className: "btn btn-secondary mr-2 w-sm-100",
-            onClick: (data) => {
-                router.push(`/users/${data.id}/edit`)
-            }
-        },
-        {
             type: "delete",
             label: "Xóa",
             className: "btn btn-danger",
+            icon: <BsFillTrashFill />,
             onClick: (data) => {
                 console.log(data)
             }
         }
     ]
+
+    const renderButtonAdd = () => {
+        return (
+            <Link
+                className={"btn btn-primary"}
+                href={"/swarms/add"}
+            >
+                THÊM ĐỘI
+            </Link>
+        )
+    }
 
     const renderIsAuthenticated = (user, sbMenuList) => {
         return (
@@ -83,6 +95,7 @@ const SwarmList = () => {
                             fetchUrl={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/swarms`}
                             columns={columns}
                             actions={actions}
+                            subHeader={renderButtonAdd()}
                         />
                     </MainBodyWrap>
                 </MainLayout>

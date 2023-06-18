@@ -21,3 +21,9 @@ export const TOAST_SETTINGS = {
     hideProgressBar: true,
     closeButton: true,
 }
+
+// SLIDER CONTROL ALTITUDE
+export const SLIDER_CONTROL_ALTITUDE = {
+    MIN: 0,
+    MAX: 100,
+}

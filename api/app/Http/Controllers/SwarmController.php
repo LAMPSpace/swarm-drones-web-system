@@ -7,6 +7,7 @@ use App\Http\Requests\DataTableRequest;
 use App\Http\Resources\SwarmCollection;
 use App\Services\SwarmService;
 use App\Traits\ResponseTrait;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class SwarmController extends Controller
@@ -19,13 +20,13 @@ class SwarmController extends Controller
         $this->swarmService = $swarmService;
     }
 
-    public function index(DataTableRequest $request)
+    public function index(DataTableRequest $request): SwarmCollection
     {
         $swarms = $this->swarmService->get($request->all());
         return new SwarmCollection($swarms);
     }
 
-    public function store(AddSwarmRequest $request)
+    public function store(AddSwarmRequest $request): JsonResponse
     {
         $swarm = $this->swarmService->store($request->all());
         if ($swarm) {
@@ -35,7 +36,7 @@ class SwarmController extends Controller
         return $this->error('Thêm bầy đàn thất bại');
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $swarm = $this->swarmService->show($id);
         if ($swarm) {
@@ -45,7 +46,7 @@ class SwarmController extends Controller
         return $this->error('Lấy thông tin bầy đàn thất bại');
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         $swarm = $this->swarmService->update($request->all(), $id);
         if ($swarm) {

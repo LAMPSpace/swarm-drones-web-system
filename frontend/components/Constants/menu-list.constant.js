@@ -4,18 +4,17 @@ import {
 import {
     FaUserFriends,
     FaUserPlus,
-    FaMapMarkedAlt
 } from "react-icons/fa";
 import {
     GiMissileSwarm,
     GiTreasureMap
 } from "react-icons/gi";
 import {
-    TbDrone
-} from "react-icons/tb";
-import {
     IoAddCircle
 } from "react-icons/io5";
+import {
+    AiOutlineOrderedList
+} from "react-icons/ai";
 
 export const USER_MENU_LIST = [
     {
@@ -34,7 +33,7 @@ export const USER_MENU_LIST = [
                 title: 'Danh sách Swarms',
                 name: 'swarms-list',
                 path: '/swarms',
-                icon: TbDrone
+                icon: AiOutlineOrderedList
             },
             {
                 title: 'Thêm mới Swarm',
@@ -45,17 +44,25 @@ export const USER_MENU_LIST = [
         ]
     },
     {
-        title: 'Danh sách Missions',
-        name: 'missions-list',
-        path: '/missions',
-        icon: GiTreasureMap
-    },
-    {
-        title: 'GPS',
-        name: 'gps',
-        path: '/gps',
-        icon: FaMapMarkedAlt
-    },
+        title: 'Quản lý Missions',
+        name: 'missions',
+        path: '#',
+        icon: GiTreasureMap,
+        subMenu: [
+            {
+                title: 'Danh sách Missions',
+                name: 'missions-list',
+                path: '/missions',
+                icon: AiOutlineOrderedList
+            },
+            {
+                title: 'Thêm mới Mission',
+                name: 'missions-add',
+                path: '/missions/add',
+                icon: IoAddCircle
+            }
+        ]
+    }
 ];
 
 export const ADMIN_MENU_LIST = [

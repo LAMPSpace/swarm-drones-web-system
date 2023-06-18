@@ -16,7 +16,7 @@ class SwarmService
         $this->swarm = $swarm;
     }
 
-    public function store(array $data)
+    public function store(array $data): ?Swarm
     {
         $data['owner_id'] = auth()->user()->id;
         return $this->swarm::create($data);
@@ -31,7 +31,7 @@ class SwarmService
         return $this->swarm::find($id);
     }
 
-    public function update(array $all, $id)
+    public function update(array $all, $id): ?Swarm
     {
         $swarm = $this->show($id);
         if (!$swarm) {

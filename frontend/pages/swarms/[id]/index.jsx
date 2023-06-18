@@ -241,7 +241,7 @@ const SwarmDashboard = () => {
 				<HeadCustom
 					title={`${data?.name} | HCMUTE Swarm Drones Control`}
 					description={`${data?.name} | HCMUTE Swarm Drones Control`} />
-				<MainLayout sbMenuList={sbMenuList} isFrontModule={false}>
+				<MainLayout sbMenuList={sbMenuList} isFrontModule={true}>
 					<MainBodyWrap isFluid={true}>
 						<div className={"row"}>
 							<div className={"col-md-4 pr-md-0 pr-3"}>

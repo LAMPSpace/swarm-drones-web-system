@@ -7,13 +7,14 @@ import {MdOutlineAutoMode} from "react-icons/md";
 import {useState} from "react";
 import dynamic from "next/dynamic";
 import {toast} from "react-toastify";
-import {TOAST_SETTINGS} from "@/components/Constants/common.constant";
+import {TOAST_SETTINGS, SLIDER_CONTROL_ALTITUDE} from "@/components/Constants/common.constant";
+import RangeSlider from "react-bootstrap-range-slider";
 
 const MapWithNoSSR = dynamic(() => import('@/components/Generals/Maps/Map'), { ssr: false });
 
 const PanelControl = ({ title, setMissionSelected, ...rest }) => {
 	const [modalShow, setModalShow] = useState(false);
-
+	const [altitude, setAltitude] = useState(0);
 	const [missions, setMissions] = useState([
 		{
 			id: 1,
@@ -166,7 +167,39 @@ const PanelControl = ({ title, setMissionSelected, ...rest }) => {
 								<ButtonIcon title={"AUTO"} icon={<MdOutlineAutoMode style={{fontSize: "40"}} />} />
 							</div>
 							<div className={"col-md-9 pr-md-2 pl-md-1 pr-1 pt-1"}>
-								<ButtonIcon title={"AUTO"} icon={<FcHome style={{fontSize: "40"}} />} />
+								<Card className={"h-100 bg-secondary text-white"}>
+									<Card.Body className={"w-100 p-2"}>
+										<div className={"row m-0 d-flex justify-content-center align-items-center"}>
+											<div className={"col p-0"}>
+												<strong><span>CHỈNH ĐỘ CAO</span></strong>
+											</div>
+											<div className={"col-auto p-0"}>
+												<input
+													type={"number"}
+													className={"form-control form-control-sm"}
+													value={altitude}
+													onChange={e => {
+														if (e.target.value < SLIDER_CONTROL_ALTITUDE.MIN) {
+															setAltitude(SLIDER_CONTROL_ALTITUDE.MIN);
+														}
+														else if (e.target.value > SLIDER_CONTROL_ALTITUDE.MAX) {
+															setAltitude(SLIDER_CONTROL_ALTITUDE.MAX);
+														}
+														else {
+															setAltitude(e.target.value);
+														}
+													}}
+												/>
+											</div>
+										</div>
+										<RangeSlider
+											value={altitude}
+											min={SLIDER_CONTROL_ALTITUDE.MIN}
+											max={SLIDER_CONTROL_ALTITUDE.MAX}
+											onChange={e => setAltitude(e.target.value)}
+										/>
+									</Card.Body>
+								</Card>
 							</div>
 						</div>
 					</div>

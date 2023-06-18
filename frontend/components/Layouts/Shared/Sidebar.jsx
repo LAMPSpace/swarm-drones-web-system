@@ -48,6 +48,7 @@ export default function Sidebar({ menuList }) {
                         <Nav.Link
                             className={`d-flex px-4 ${router.pathname === menu.path ? "active" : ""}`}
                             onClick={() => handleSelect(index)}
+                            aria-expanded={activeKey.includes(index)}
                         >
                             <span className="sidebar-icon d-flex align-items-center">
                                 <menu.icon className="fill-current width-4 height-4 mr-3" />
@@ -59,7 +60,7 @@ export default function Sidebar({ menuList }) {
                                 {activeKey.includes(index) ? <MdOutlineExpandLess /> : <MdOutlineExpandMore />}
                             </span>
                         </Nav.Link>
-                        <Collapse in={activeKey.includes(index)}>
+                        <Collapse in={activeKey.includes(index)} className={"sub-menu"}>
                             <div>
                                 <Nav className="d-block text-truncate">
                                     {renderMenu(menu.subMenu)}
