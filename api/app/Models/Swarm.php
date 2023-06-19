@@ -31,9 +31,4 @@ class Swarm extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
-
-    public function missions(): BelongsTo
-    {
-        return $this->belongsTo(PlannerMission::class, 'swarm_id');
-    }
 }

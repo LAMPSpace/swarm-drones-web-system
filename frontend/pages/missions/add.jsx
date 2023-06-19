@@ -7,15 +7,13 @@ import Loading from "@/components/Layouts/Shared/Loading";
 import HeadCustom from "@/components/Layouts/Shared/HeadCustom";
 import MainLayout from "@/components/Layouts/MainLayout";
 import MainBodyWrap from "@/components/Layouts/Shared/MainBodyWrap";
-import {Card, Form, Dropdown, DropdownButton, Button} from "react-bootstrap";
+import {Form, Button} from "react-bootstrap";
 import dynamic from 'next/dynamic';
-import Label from "@/components/Forms/Label";
-import InputText from "@/components/Forms/InputText";
-import CardDroneDetail from "@/components/Generals/Cards/CardDroneDetail";
-import Link from "next/link";
 import CardWrap from "@/components/Generals/Cards/CardWrap";
 import InputError from "@/components/Forms/InputError";
 import CardWaypointDetail from "@/components/Generals/Cards/CardWaypointDetail";
+import {toast} from "react-toastify";
+import {missionService} from "@/services/missions";
 const MapWithNoSSR = dynamic(() => import('@/components/Generals/Maps/Map'), { ssr: false });
 
 const AddMission = () => {
@@ -31,6 +29,7 @@ const AddMission = () => {
 	const [waypoints, setWaypoints] = useState([]);
 	const [status, setStatus] = useState(null);
 	const { get } = swarmService();
+	const { add } = missionService();
 
 	console.log("waypoints", waypoints);
 
@@ -44,6 +43,12 @@ const AddMission = () => {
 		}
 	}, [user]);
 
+	useEffect(() => {
+		if (swarmLookups?.length > 0) {
+			setSwarmId(swarmLookups[0].id);
+		}
+	}, [swarmLookups]);
+
 	const renderDetailForm = () => {
 		return (
 			<Form>
@@ -54,8 +59,9 @@ const AddMission = () => {
 						name="name"
 						type="text"
 						placeholder={"Nhập tên nhiệm vụ"}
-						className={"form-control"}
+						className={`form-control ${formErrors?.name ? "is-invalid" : ""}`}
 						value={name}
+						required={true}
 						onChange={(e) => setName(e.target.value)}
 					/>
 					<InputError message={formErrors?.name} />
@@ -65,8 +71,9 @@ const AddMission = () => {
 					<Form.Select
 						id="swarm"
 						name="swarm"
-						className={"form-control"}
+						className={`form-control ${formErrors?.swarm_id ? "is-invalid" : ""}`}
 						value={swarm_id}
+						required={true}
 						onChange={(e) => setSwarmId(e.target.value)}
 					>
 						{
@@ -82,7 +89,43 @@ const AddMission = () => {
 	}
 
 	const handleAddMission = async () => {
-		// Handle here
+		if (!name) {
+			setFormErrors({
+				name: ["Chưa nhập tên nhiệm vụ"]
+			})
+			return;
+		}
+
+		if (!swarm_id) {
+			setFormErrors({
+				swarm_id: ["Chưa chọn bầy đàn"]
+			})
+			return;
+		}
+
+		if (waypoints.length === 0) {
+			toast.error("Chưa có điểm đến nào được chọn");
+			return;
+		}
+
+		const waypointsClone = waypoints.map((waypoint, index) => {
+			return {
+				...waypoint,
+				id: index + 1
+			}
+		});
+
+		const data = {
+			name,
+			swarm_id,
+			waypoints: waypointsClone
+		}
+
+		add({
+			...data,
+			setErrors: setFormErrors,
+			setStatus
+		});
 	}
 
 	const renderSubHeader = () => {

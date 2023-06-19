@@ -9,8 +9,6 @@ class PlannerMission extends Model
 {
     use HasFactory;
 
-
-
     protected $fillable = [
         'name',
         'swarm_id',
@@ -18,4 +16,14 @@ class PlannerMission extends Model
         'status',
         'config'
     ];
+
+    protected $casts = [
+        'waypoints' => 'array',
+        'config' => 'array'
+    ];
+
+    public function swarm()
+    {
+        return $this->belongsTo(Swarm::class, 'swarm_id');
+    }
 }

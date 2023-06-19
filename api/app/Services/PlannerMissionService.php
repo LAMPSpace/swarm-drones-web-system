@@ -18,6 +18,7 @@ class PlannerMissionService
 
     public function store(array $data)
     {
+//        $data['waypoints'] = json_encode($data['waypoints']);
         return $this->plannerMission::create($data);
     }
 
@@ -31,7 +32,7 @@ class PlannerMissionService
     public function get(array $data)
     {
         return $this->getPaginatedData(
-            $this->plannerMission->with('swarm')->getQuery(),
+            $this->plannerMission->getQuery(),
             $data
         );
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddMissionRequest;
 use App\Http\Requests\DataTableRequest;
 use App\Http\Resources\PlannerMissionCollection;
 use App\Services\PlannerMissionService;
@@ -22,12 +23,18 @@ class PlannerMissionController extends Controller
     public function index(DataTableRequest $request)
     {
         $plannerMissions = $this->plannerMissionService->get($request->all());
+        return $plannerMissions;
         return new PlannerMissionCollection($plannerMissions);
     }
 
-    public function store(Request $request)
+    public function store(AddMissionRequest $request)
     {
-        //
+        $plannerMission = $this->plannerMissionService->store($request->all());
+        if ($plannerMission) {
+            return $this->success($plannerMission, 'Thêm nhiệm vụ thành công');
+        }
+
+        return $this->error('Thêm nhiệm vụ thất bại');
     }
 
     public function show($id)
